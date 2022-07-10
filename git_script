@@ -1,0 +1,213 @@
+AzureAD+KeerthikumarBB@AHR-LTS-0007 MINGW64 ~/Desktop/Linux-Learning/Git
+$ git init    { git init ---> git will initialise }
+Initialized empty Git repository in C:/Users/KeerthikumarBB/Desktop/Linux-Learning/Git/.git/
+
+AzureAD+KeerthikumarBB@AHR-LTS-0007 MINGW64 ~/Desktop/Linux-Learning/Git (master)
+
+To check the git status using the above command
+ 
+$git status
+
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        Git learning.txt
+        git-2.32.0.tar.gz
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+
+
+ 
+$ git add .
+
+Now it is tracked
+
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   ../Git learning.txt
+        new file:   ../git-2.32.0.tar.gz
+
+Now doing commit
+
+
+*****************************************************************************Git and Git hub ********************************************************************
+Git is a version control system [VCS] or source code management [SCM] 
+
+It is used to track the changeds in files
+It is platform independent
+It is a free and open-source also paid version will be avail
+They can handle larger projects efficiently.
+
+
+version control {v1,v2,v3} To store the files into database
+
+Two types of version control
+
+1) Cenrtalized : Centralized version control systems are based on the idea that there is a single “central” copy of your project somewhere (probably on a server),
+ and programmers will “commit” their changes to this central copy.
+
+2) Distributed : These systems do not necessarily rely on a central server to store all the versions of a project’s files. 
+Instead, every developer “clones” a copy of a repository and has the full history of the project on their own hard drive.
+This copy (or “clone”) has all of the metadata of the original.
+
+Free version :- GIT,SVN
+PAID : BITBUCKET,P4,STASH
+
+Working dir ------------> Staging add --------------> repository [Project folder]
+             git add                    git commit
+
+Reporsitory
+
+#) Local repo
+#) central repo
+#) Remote repo
+ 
+
+$ git init . {or} git init  { git init ---> git will initialise }
+Initialized empty Git repository
+
+To configure the user email on git
+
+$ git config --global user.email "keerthikumarbb98@gmail.com"
+
+To configure the user name on git
+
+$ git config --global user.name "Keerthi"
+
+stages for git hub
+
+Working area
+
+staging area (green color )
+
+Now tracking { moving to staging or index area }
+
+To check the git status
+
+$git status
+
+To add the files into commit
+
+$ git add *  or git add . (or give the files name for adding)
+
+When the red color is there, that time the files are didn't went to staging area
+
+$ git commit -m "new files"  (To commit the new files)
+
+if we want to check the commit use the below command
+
+$ git log --oneline
+e35afe9 (HEAD -> master) new files
+
+$ git log
+commit e35afe9dac15ff436cc7bdd791c408bebe7e0f74 (HEAD -> master)
+Author: Keerthi <keerthikumarbb98@gmail.com>
+Date:   Mon Oct 11 05:16:20 2021 +0530
+
+    new files
+
+git remote add origin https://github.com/Keerthibb/staging.git   ---> Remote location (To add the remote and local repository)
+
+git push -u origin master ---> To push the git codes
+
+
+For cloning ---> git clone and link (i.e, https://github.com/Keerthibb/staging.git)
+
+sudo apt-get update
+
+sudo apt install git
+
+sudo git clone https://github.com/Keerthibb/staging.git
+
+keerthi@Ubuntu-VM:/Git$ ls -ltr staging/
+total 32
+-rw-r--r-- 1 root root 4399 Oct 11 06:07 'LVM and mounting.txt'
+-rw-r--r-- 1 root root 2556 Oct 11 06:07 'Linux Kill and Logout Users Command.txt'
+-rw-r--r-- 1 root root 2932 Oct 11 06:07 'How to check open ports in Linux using the CLI.txt'
+-rw-r--r-- 1 root root 9518 Oct 11 06:07 'CPU.sh and cd var logs details.txt'
+-rw-r--r-- 1 root root  234 Oct 11 06:07 '10 Linux distributions.txt'
+
+
+$ git reset ==> command is used to revert back the changes if we added git files 
+
+
+$ git pull ==> To pull the data from the git hub then push the codes 
+
+If data deletes from local we can do clone (sudo git clone https://github.com/Keerthibb/staging.git)
+
+After moving into staging area if we want changes something, just change what we want and then again we need to add and commit.
+
+ex : we have created 1 code at 8:00 AM and then we added the codes at 8:30 AM, 
+if we found any errors in the second code we can go back to the first created code using the below command
+
+$ git log ==> show the history and commit code, using commit code we can go back to old one
+
+$git checkout
+
+$ git checkout main ==> It will directly take to top commit.
+
+$ git branch  ==> Show the branches
+
+$ git branch -a
+
+***********************************************************Generating a new SSH key and adding it to the ssh-agent*******************************************************************
+After you've checked for existing SSH keys, you can generate a new SSH key to use for authentication, then add it to the ssh-agent.
+
+Mac
+Windows
+Linux
+About SSH key generation
+If you don't already have an SSH key, you must generate a new SSH key to use for authentication. If you're unsure whether you already have an SSH key, you can check for existing keys. For more information, see "Checking for existing SSH keys."
+
+If you want to use a hardware security key to authenticate to GitHub, you must generate a new SSH key for your hardware security key. You must connect your hardware security key to your computer when you authenticate with the key pair. For more information, see the OpenSSH 8.2 release notes.
+
+If you don't want to reenter your passphrase every time you use your SSH key, you can add your key to the SSH agent, which manages your SSH keys and remembers your passphrase.
+
+Generating a new SSH key
+Open Git Bash.
+
+Paste the text below, substituting in your GitHub email address.
+
+$ ssh-keygen -t ed25519 -C "your_email@example.com"
+Note: If you are using a legacy system that doesn't support the Ed25519 algorithm, use:
+
+$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+This creates a new SSH key, using the provided email as a label.
+
+> Generating public/private algorithm key pair.
+When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.
+
+> Enter a file in which to save the key (/c/Users/you/.ssh/id_algorithm):[Press enter]
+At the prompt, type a secure passphrase. For more information, see "Working with SSH key passphrases."
+
+> Enter passphrase (empty for no passphrase): [Type a passphrase]
+> Enter same passphrase again: [Type passphrase again]
+Adding your SSH key to the ssh-agent
+Before adding a new SSH key to the ssh-agent to manage your keys, you should have checked for existing SSH keys and generated a new SSH key.
+If you have GitHub Desktop installed, you can use it to clone repositories and not deal with SSH keys.
+
+Ensure the ssh-agent is running. You can use the "Auto-launching the ssh-agent" instructions in "Working with SSH key passphrases", or start it manually:
+
+# start the ssh-agent in the background
+$ eval "$(ssh-agent -s)"
+> Agent pid 59566
+Add your SSH private key to the ssh-agent. If you created your key with a different name, or if you are adding an existing key that has a different name, replace id_ed25519 in the command with the name of your private key file.
+
+$ ssh-add ~/.ssh/id_ed25519
+Add the SSH key to your account on GitHub. For more information, see "Adding a new SSH key to your GitHub account."
+
+
+git init . {or} git init
+
+create a file
+
+git add . 
