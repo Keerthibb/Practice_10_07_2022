@@ -1,0 +1,164 @@
+du -sch * | grep G
+tail -f nagios-05-11-2022-00.log
+lsof | grep nagios-05-11-2022-00.log
+gzip nagios-05-09-2022-00.log nagios-05-10-2022-00.log nagios-05-11-2022-00.log & ctrl+z
+jobs -l
+bg 1
+jobs -l
+tail -f nagios.log
+lsof | grep nagios.log
+
+*********************************************************************************************************************************************
+May 10 17:43:13 dca-prd-redis09 adclient[1107]: INFO <bg:run-queue> base.schema populate cache(Group) error 'Last error was unexpected disconnect sjc-prd-dc01.sc5.coupons.lan; deferring reconnect.' – giving up immediately
+
+auth.log is getting filled so fast, upon checking have seen the above errors in log, so did a adflush and adreload on those servers
+
+Log rotation
+
+logrotate -vf /etc/logrotate.conf
+
+Running fuser command without any option will displays the PIDs of processes currently accessing your current working directory.
+
+$ fuser .
+OR
+$ fuser /home/file.name
+
+lsof auth.log [r]fuser auth.log
+
+gzip auth.log.1 [zip the dumped file]
+
+
+Some case we need to stop the rsyslog service and gzip and start the service
+
+service rsyslog stop
+
+*********************************************************************************************************************************************
+
+tar -cvzf * --exclude .tar.gz
+
+
+ps -e S | wc -l --> To check the sleep process
+
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -10
+
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -10
+
+top -b -c| head -15
+
+
+
+Press Esc + gg : Go to top the file
+
+Esc + G : Go to bottom of the file
+
+*****************************************************************************************************************************************************************
+
+find * -type f -name "*.log" || find * -type f -name "*.log" -exec ls -lrth {} \;  || find . -type f -name "*.log" -exec ls -lrth {} \;
+
+find * -type f -name "*.txt"
+
+find /data/raw_files -type f -exec zip -j bundle.zip {} \;
+
+find * -type f -name "*.log.gz"  |  find * -type f -name "*.log.gz" | wc -l
+
+find . -type f -printf "%C@ %p\n" | sort -rn
+
+ find .-mtime +5 -exec ls -lrt {} \;
+ 
+ find . -mtime +5 -type f |xargs tar cvf archive.`date +%Y%m%d`.tar    --> Archive with the date
+
+find <path> -name '*FileName*'
+
+find -type f -name *.txt -mtime +7 -exec rm -rf {} \; 
+
+find . -mtime +7 -exec rm -rf {} \;
+
+find . -type f -printf "%C@ %p\n" | sort -rn | head -n 10  --> To find out the latest 10 files
+
+find . -name "*.gz" -mtime +15 -exec mv {} /home/ci/logs/olderfiles/ \; &      ---> To move
+
+find * -type f -name "*.txt" -exec tar -cvzf argu.tar.gz * {} \;   || find . -name "*.txt" -mtime +7 -exec tar -cvzf argument.tar.gz * {} \;      ---> To archive using tar
+
+find  * -type f  -name "*.txt"  -mtime +100 -exec gzip {} \;  --> To archive using gzip
+
+for i in `cat mount-point`; do ssh -i /root/.ssh/sc5-prd root@$i "hostname -f; nslookup isilon-nfs.sc5.coupons.lan | grep -e "Name" -e "Address" " ;done
+
+***************************************************************************************IMPT********************************************************************************************
+
+For specific file archive use "*.txt"  orelse different type of extensions ".txt*"
+
+
+find  -type f ! -name "*.gz" ! -name "gc-*" ! -name "*.tmp" ! -name "*-ep.log"  -mtime +100 -exec gzip {} \;        {or}   find  -type f ! -name ".txt*" ! -name ".exe*" ! -name ".log*" -exec gzip {} \;
+
+find  -type f ! -name "*.gz"  -mtime +100 -exec gzip {} \;
+
+find  /var/log/tomcat7/ -type f ! -name "*.gz"  -mtime +100 -exec gzip {} \;
+
+find  /var/log/tomcat7/ -type f ! -name "*.gz"  -mtime +100 -exec rm -rf {} \;
+
+find  /var/log/tomcat7/ -type f  -name "*.gz"  -mtime +100 -exec rm -rf {} \;
+
+find  /var/log/tomcat7/ -type f  -name "*.txt"  -mtime +100 -exec gzip {} \;
+
+find  /var/log/tomcat7/ -type f  -name "*.txt"  -exec gzip {} \;   {or} find [current dir] -type f  -name "*.txt"  -exec gzip {} \;    [To keep the original file use ==> find -type f -name "*.log" -exec gzip -k {} \;]
+
+To extract the gzip file ==>  gzip -d filename.gz.
+
+To change the extension of multiple files  ==> find . -name '*.txt_bak' -exec sh -c 'mv "$0" "${0%.txt_bak}.log"' {} \;
+
+txt_bak is the old format file and .log is the new log file
+
+
+du -sch * --exclude={mnt,home} | grep G
+
+du -sch * --exclude={mnt,home,proc} | grep G
+
+du -sch * --exclude={run,data_nre_sfo,data_nre,data_nre_dca}
+
+du -sch * | egrep 'G|T'
+
+zcat or less command to View Contents of Compressed Files in Linux
+
+
+ps -elf | grep 'process name' | awk print '{print$4}' | xargs 
+
+ps -elf | grep 'process name' | awk '{print $4}' | xargs kill -9
+
+lsof|grep deleted|awk '{print $2}'|xargs kill -9
+
+ ps -elf | grep /infra/down/alert.py
+ ps -elf | grep /infra/down/alert.py | wc -l
+ 
+ ps -elf | grep /infra/down/alert.py | awk '{print $4}'
+ 
+ ps -elf | grep /infra/down/alert.py | awk '{print $4}' | wc -l
+ 
+ ps -elf | grep /infra/down/alert.py | awk '{print $4}' | xargs kill -9
+ 
+ ps -elf | grep /infra/down/alert.py | wc -l
+ 
+ 
+Linux - Kill all processes of deleted files that are still open
+
+ lsof|grep deleted|awk '{print $2}'|xargs kill -9  ||  ps -efl | grep deleted | awk '{print $2}'| xargs kill -9
+
+************************************************************Tomcat logs****************************************************************
+
+root@sfo-prd-pai11:/var/log/tomcat7
+
+root@sfo-prd-pai11:/var/log/tomcat7# ll | grep localhost_access_log.2022-04 | wc -l
+30
+root@sfo-prd-pai11:/var/log/tomcat7# gzip localhost_access_log.2022-04-*
+
+************************************************************************************************************************
+
+If apache2 process is running fine and check the load value and check the log usage /var/log/tomcat7
+
+If syslog check the status and restart it
+
+> syslog
+
+************************************************************************************************************************
+
+ 
+
