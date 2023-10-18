@@ -1,0 +1,21 @@
+ansible-playbook -i hosts <play book name>
+
+ansible-playbook -i hosts <play book name> --check {It will not perform the actions actually}
+It will check whether can be performed ot not
+
+*************************************************************************************************************************************************
+---
+- name: nginx Install and start the service
+  hosts: web
+  become: true
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: latest
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+				
+*************************************************************************************************************************************************

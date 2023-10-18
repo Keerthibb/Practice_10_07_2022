@@ -1,0 +1,10 @@
+FROM nginx
+WORKDIR /
+RUN mkdir /practical
+RUN touch /practical/record{1..100}.txt
+RUN echo "This is a custom image" > /practical/index.txt
+ENV name Keerthi
+COPY test.txt /practical
+RUN apt update -y && apt install curl -y && apt install nginx -y
+RUN service nginx start
+

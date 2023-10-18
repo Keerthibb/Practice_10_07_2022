@@ -1,0 +1,1050 @@
+Enable Debugging : bash -x filename.bash
+
+Disable Debugging : `set +x` command is used to disable the debugging feature.
+
+$# represents the number of arguments. $* represents the string of arguments.
+
+* 4 * * * /usr/bin/find /backup/dbbackup/backuplog/wst1a-prd-ispdb01/mariadb-bin* -mtime +2 -exec rm -f {} \;
+
+df -Ph | grep 'rootfs' | awk {'print $5'}
+
+
+for using AND operator use &&
+if [ "$age" -gt 18] && ["$age" -lt 30 ]
+
+- The -a option provide an alternative compound condition test.
+if [ "$age" -gt 18 -a "$age" -lt 30 ]
+
+- if [[ $condition1 && $condition2 ]]    # Also works.
+if [[ "$age" -gt 18 && "$age" -lt 30 ]]
+
+###############################################################################
+
+for using OR operator use ||
+if [ "$age" -gt 18] || ["$age" -lt 30 ]
+
+- The -o option provide an alternative compound condition test.
+if [ "$age" -gt 18 -o "$age" -lt 30 ]
+
+- if [[ $condition1 || $condition2 ]]    # Also works.
+if [[ "$age" -gt 18 || "$age" -lt 30 ]]
+
+*************************************************************************************************************************************
+#!/bin/bash
+dns=`/usr/bin/time -o output.time.txt -p nslookup google.com`
+#utime=`cat output.time.txt| grep -i user | awk '{print $2}'`
+utime=0.35
+
+if [ 1 -eq "$(echo "0.1 < ${utime}" | bc)" ]
+then
+            echo "$utime" is high
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+dns=`/usr/bin/time -o output.time.txt -p nslookup google.com`
+#utime=`cat output.time.txt| grep -i user | awk '{print $2}'`
+utime=0.43
+comp=`echo $utime | tr -d '.'`
+
+if [ $comp -ge 100 ]; then
+        echo $utime is high
+else
+        echo $utime is normal
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+if [ $# -lt 1 ]; then
+   echo "Please update respective host list file and execute script like below:-"
+   echo "Ex: $0 sfo"
+   echo "    $0 dca"
+   echo "    $0 iad"
+   echo "    $0 sjc"
+   exit
+fi
+
+case $1 in
+  sfo)
+   hosts="sfo_host_list.txt"
+   passfile=".pass_root_sfo"
+   gcpw=$(cat .passgcuser)
+   domain="sfo.ci.lan"
+   ;;
+  dca)
+   hosts="dca_host_list.txt"
+   passfile=".pass_root_dca"
+   gcpw=$(cat .passgcuser)
+   domain="dca.ci.lan"
+   ;;
+  iad)
+   hosts="iad_host_list.txt"
+   passfile=".pass_root_iad"
+   gcpw=$(cat .passgcuser)
+   domain="iad.ci.lan"
+   ;;
+  sjc)
+   hosts="sjc_host_list.txt"
+   passfile=".pass_root_sjc"
+   gcpw=$(cat .passgcuser)
+   domain="sc5.coupons.lan"
+   ;;
+  *)
+   echo "Please input correct dc to the script. Ex: $0 sfo"
+   exit
+   ;;
+esac
+
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NOCOLOR='\033[0m'
+
+echo
+echo -e "${YELLOW}||||||||||||||||||||||||||||| ${NOCOLOR}"
+echo
+COUNTER=0
+for host in $(cat $hosts)
+do
+    COUNTER=$((COUNTER+1))
+    echo -e "${RED}[$COUNTER] ${BLUE}$host${NOCOLOR} :-"
+    cat $passfile | while read line
+    do
+        sshpass -p$line ssh -o StrictHostKeyChecking=no root@$host 'bash -s' < _sub_task.sh $(echo $domain) $gcpw
+
+        if [ $? -eq 0 ]; then
+           exit
+        fi
+    done
+echo
+echo -e "${YELLOW}||||||||||||||||||||||||||||| ${NOCOLOR}"
+echo
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+   echo "Please input domain gcuserpw"
+   exit
+fi
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+PURPLE='\033[0;35m'
+NOCOLOR='\033[0m'
+
+domain=$1
+gcpw=$2
+
+echo
+echo -e "${GREEN}$(lsb_release -ar 2>/dev/null | grep -i Description | cut -s -f2) ${RED}| ${GREEN}$(hostname -i) ${RED}| ${GREEN}$(hostname -f)${NOCOLOR}"
+ver=$(lsb_release -sr | awk -F '.' '{print $1}')
+threshold="18"
+if [ "$ver" -le "$threshold" ]; then
+ echo -e "${PURPLE} $(adinfo | grep -i domain) ${NOCOLOR}"
+ echo
+ adleave -rf
+ echo $gcpw | adjoin -w $domain -u gcuser
+ echo
+ echo -e "${GREEN} $(adinfo | grep -i domain) ${NOCOLOR}"
+
+ echo
+
+else
+ echo -e "${PURPLE} $(realm list | grep domain-name) ${NOCOLOR}"
+ echo
+ realm leave -v
+ echo $gcpw | realm join $domain -U gcuser
+ echo
+ echo -e "${GREEN} $(realm list | grep domain-name) ${NOCOLOR}"
+ echo
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+dnsresolution=$(/usr/bin/time -o /home/sbargujar-prd/test.txt -p nslookup www.google.com)
+usertime=`cat /home/sbargujar-prd/test.txt | grep -i 'user' | cut -d " " -f2`
+echo $usertime
+unittime=`echo $usertime | cut -d "." -f1`
+echo $unittime
+decimaltime=`echo $usertime | cut -d "." -f2`
+echo $decimaltime
+if [ $unittime -ge 1 ] || [ $decimaltime -ge 09 ]; then
+echo "$usertime resolution time is High.!" | mail -s "Resolution time is High $(hostname)" noc-alerts@quotient.com
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+for i in `cat sjc_dev_vms` ;do
+         ping -c 2 $i
+         result=`echo $?`
+         if [[ "$result" == "0" ]]; then
+                echo $i >> output.txt
+         fi; done
+
+
+#---------------------------------------------------
+
+#!/bin/bash
+for i in {sjc-dev-usrv323.corp.coupons.com,sjc-dev-usrv5994.corp.coupons.com} ; do  
+	sshpass -p 'password!' ssh $i -l root  "hostname"
+         result=`echo $?`
+         if [[ "$result" == "0" ]]; then
+                echo $i >> output.txt
+         fi; done
+	
+*************************************************************************************************************************************	
+		 
+#!/bin/bash
+
+paths=("/path/to/repository_1" "/path/to/repository_2" "/path/to/repository_n")
+
+for item in ${paths[@]};
+do
+	cd "${item}"
+
+	echo "----------------------------------------"
+	echo "${item}"
+	echo "----------------------------------------"
+	if [ -d "${item}" ] && [ -d "${item}/.git" ];
+	then
+		if [ -n "$(git status --porcelain)" ];
+		then
+			echo "Some local changes detected !!!"
+		else
+			git pull --all
+		fi
+	else
+		echo "Indicated path does not indicate repository.";
+	fi
+	echo ""
+
+	cd ..
+done
+
+		 
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+DN="@ci.lan"
+
+echo "Please do not login as root user!!"
+
+read -p "Enter your name : " USERNAME
+
+read -p "Enter the server name : " SERVER
+
+read -sp "Enter the password: " PASSWORD
+echo
+
+COMMAND="hostname && find /home/ci/logs/ -name "gc-*" -mtime -1 -exec cp -p {} /home/$USERNAME$DN/ \; && ls -Lt /home/$USERNAME$DN/ | head -1 | xargs zip `date +%d-%h-%y-%T`-gc-log.zip"
+
+for HOSTNAME in $SERVER; do
+        sshpass -p ${PASSWORD} ssh -l ${USERNAME} ${HOSTNAME[@]}.sfo.ci.lan "${COMMAND}"
+        if [  $? -eq 0  ] ; then
+                echo "GC log file is copied and zipped."
+        else
+                echo "GC log file is not copied please retry!"
+        fi
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+echo "********************Please wait for a while to validate********************"
+
+TIMESTAMP=$(date +%d-%h-%y-%T)
+DESTINATION="/tmp/DNS_V"
+
+if [ ! -d "$DESTINATION" ]
+then
+        mkdir -p $DESTINATION
+fi
+
+for ((n=0;n<10;n++))
+do
+ host newcpr-int-lb 10.55.4.21 >> $DESTINATION/dns-$TIMESTAMP.txt
+ host newcpr-int-lb 10.55.4.22 >> $DESTINATION/dns-$TIMESTAMP.txt
+ host newcpr-int-lb 10.55.4.23 >> $DESTINATION/dns-$TIMESTAMP.txt
+ host newcpr-int-lb 10.55.4.101 >> $DESTINATION/dns-$TIMESTAMP.txt
+ host newcpr-int-lb 10.55.4.102 >> $DESTINATION/dns-$TIMESTAMP.txt
+
+ if [  $? -ne 0  ] ; then
+         echo "DNS Validation looks bad.." >> $DESTINATION/error.log
+                cat $DESTINATION/error.log
+        else
+                echo "DNS Validation looks good.." > $DESTINATION/success.log
+fi
+done
+
+cat $DESTINATION/success.log
+
+*************************************************************************************************************************************
+#!/bin/bash
+
+status="`/etc/init.d/spark-master status | awk '{print $7}'`"
+status1="`/etc/init.d/spark-master status | awk '{print $2}'`"
+if [ "$status" = "not" ] || [ "$status1" = "not" ]
+then
+echo `service spark-master start; mail -s "Subject: Restarted spark master and slave service on NRECS nodes" noc-alerts@quotient.com < /root/mail.txt;` && for i in `cat /home/nrajasekar-prd/servers.txt`;
+        do
+                sshpass -f /root/passwd.txt /usr/bin/ssh root@$i 'service spark-worker start';
+        done
+fi
+=====================================================================
+root@sfo-prd-nrecs01:/home/praja-prd# cat /home/nrajasekar-prd/nrecsdownrecovery.sh.org
+#!/bin/bash
+
+nodetool status | grep DN | awk '{print $2}' > /root/nrecsdownservers.txt
+for i in `cat /root/nrecsdownservers.txt`;
+do
+sshpass -f /root/passwd.txt /usr/bin/ssh root@$i '/etc/init.d/cassandra stop;sleep 20;pgrep -u $user cassandra | xargs kill -9;sleep 20;/etc/init.d/cassandra start;sleep 250;nodetool status > /root/down.txt; mail -s "Subject:Restarted cassandra service on this server '$i'" blr-noc@quotient.com < /root/down.txt';
+
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+os=('ubuntu' 'centos' 'mint' 'redhat' 'debian')
+
+echo "${os[@]}"
+echo "${os[1]}"
+echo "${os[-1]}"
+echo "${!os[@]}"
+echo "${#os[@]}"
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+FILEHOME="/etc"
+FILENAME="db.pn2.ci.lan"
+cp $FILEHOME/bind/$FILENAME $FILEHOME/bind/$FILENAME-`date +%d-%h-%y-%T`
+SERIAL_COUNT=$(cat $FILEHOME/bind/$FILENAME | grep "Serial" | awk '{print $1}' | cut -f1 -d":" | uniq)
+BACKUP_FILE=$(find $FILEHOME/bind -type f | xargs ls -lt | head -1 | awk '{print $9}')
+CONF_FILE=$(find $FILEHOME/bind -type f | xargs ls -lt | head -2 | tail -1 | awk '{print $9}')
+RENAME=($FILEHOME/bind/$FILENAME-backup-`date +%T`)
+REPLACE=($FILEHOME/bind/$FILENAME)
+
+echo
+
+read -p " Enter the server name : " SERVER
+
+read -p " Enter the server IP : " IP
+
+if [ -z "$SERVER" ] || [ -z "$IP" ]; then
+    echo " Input is blank. Please check..!"
+    exit
+fi
+
+read -p " Do you want to 'add/remove' the HOST : " ACTION
+echo
+
+cat $FILEHOME/bind/$FILENAME | grep $SERVER > /dev/null
+
+if [ $? -eq 0 ] && [ "$ACTION" == "add" ]; then
+        echo "Server '$SERVER' entry already exists."
+        exit
+fi
+
+cat $FILEHOME/bind/$FILENAME | grep $IP > /dev/null
+
+if [ $? -eq 0 ] && [ "$ACTION" == "add" ]; then
+        echo "IP '$IP' is binded with different host. Please cross-verify the IP before adding."
+        exit
+fi
+
+cat $FILEHOME/bind/$FILENAME | grep $SERVER > /dev/null
+
+if [ $? -ne 0 ] && [ "$ACTION" == "remove" ]; then
+        echo "Server '$SERVER' entry doesn't exist."
+        exit
+fi
+
+while true; do
+
+read -p "Are you sure you want to proceed? (yes/no) : " yn
+
+case $yn in
+        yes ) echo "Proceeding with the current action.";
+                break;;
+        no ) echo "Exiting from the current action and not made any changes...";
+                exit;;
+        * ) echo "Invalid response";;
+esac
+
+done
+
+SUM=$(("$SERIAL_COUNT" + 1))
+
+######################  ADDING HOST AND SERIAL COUNT UPDATE ###############################
+
+if [[ "$ACTION" == "add" ]]; then
+        sed -ie "/^sfo-pn2-igen01./a $SERVER  IN        A       $IP" $FILEHOME/bind/$FILENAME
+        sed -i s/${SERIAL_COUNT}/${SUM}/g $FILEHOME/bind/$FILENAME
+        sudo named-checkzone pn2.ci.lan /etc/bind/db.pn2.ci.lan > /dev/null
+        if [ $? -eq 0 ]; then
+                sudo /etc/init.d/bind9 restart > /dev/null
+                sudo /etc/init.d/bind9 status > /dev/null
+                echo "'$SERVER' Host entry and Serial count has been updated successfully..."
+        else
+                mv $CONF_FILE $RENAME
+                mv $BACKUP_FILE $REPLACE
+                echo "Something went wrong..! Reverted the changes."
+        fi
+fi
+
+######################  REMOVING HOST AND SERIAL COUNT UPDATE ###############################
+
+if [[ "$ACTION" == "remove" ]]; then
+        sed -i "/$SERVER/d" $FILEHOME/bind/$FILENAME
+        sed -i s/${SERIAL_COUNT}/${SUM}/g $FILEHOME/bind/$FILENAME
+        sudo named-checkzone pn2.ci.lan /etc/bind/db.pn2.ci.lan > /dev/null
+        if [ $? -eq 0 ]; then
+                sudo /etc/init.d/bind9 restart > /dev/null
+                sudo /etc/init.d/bind9 status > /dev/null
+                echo "'$SERVER' Host entry has been removed and Serial count has been updated successfully..."
+        else
+                mv $CONF_FILE $RENAME
+                mv $BACKUP_FILE $REPLACE
+                echo "Something went wrong..! Reverted the changes."
+        fi
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/sh
+dused=$(df -H|grep "^/dev/sda2"|awk '{print $5}'|sed 's/%//g')
+echo $dused
+if [ $dused -ge 70 ];then
+  echo "The disk storage is used ${dused}%!"|mail -s "Alert: Disk Storage" yourmail@xyz.com
+fi
+
+*************************************************************************************************************************************
+
+bash while-read.sh | grep keerthi
+
+#!/bin/bash
+
+cat /etc/passwd | while read k
+do
+        echo "$k"
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+YEAR=$(date -u +%Y)
+MONTH=$(date -u +%m)
+DAY=$(date -u +%d)
+#/bin/date -d "+7 hours" | awk '{print $4}' >> /home/slewis/t.txt
+#HOUR=$(/bin/sed -n 1p /home/slewis/t.txt |cut -d ":" -f1)
+HOUR=$(date -u +%H)
+SH=$(/bin/ls /WebLog_New/SC5/$YEAR/$MONTH/$DAY/lighthouse-$YEAR$MONTH$DAY$HOUR.log* | wc -l);
+if [ "$SH" -ne 1 ];
+then
+         echo "nswl logs are not beeing written - Kindly check for the process . Runbook https://tinyurl.com/y89vau3s " | mail -s "sjc-prd-nswl244 logs are not beeing written" noc-alerts@quotient.com
+else
+        echo "All is well.";
+fi
+/usr/bin/truncate -s 0 /home/slewis/t.txt
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+# Declaration of log paths
+TIMESTAMP=`date '+%m-%d_%H-%M'`
+log_path=/var/log/sc5_archive_cleanup/$TIMESTAMP/
+mkdir -p $log_path
+mail_file=$log_path/mail_sent.txt
+init_filename=$log_path/init_$TIMESTAMP.txt
+purged_filename=$log_path/purged_$TIMESTAMP.txt
+
+
+# Declaration of Path (SFO/DCA),distination  mtime value
+mtime="-mtime +365"
+# below path is dca archeive
+path="/sc5-archive/SC5_Logrepo"
+
+# Verify if the mount points are intact
+df $path > /dev/null 2>&1
+if [ $? -ne 0 ]
+then
+        echo "mount points ($path) doesn't exist" >> $mail_file
+        exit
+else
+        echo "mount points ($path) exits" >> $mail_file
+fi
+
+# List of mtime metioned above duration files to the file "init_filename"
+find $path -type f $mtime | tee $init_filename
+
+value=`cat $init_filename | wc -l`
+echo "======================================================" >> $mail_file
+echo "No. of files older than 400 days in $path : $value" >> $mail_file
+
+# Purged files from Archive
+for i in `cat $init_filename`
+do
+        rm $i
+        echo $i >> $purged_filename
+done
+
+value=`cat $purged_filename | wc -l`
+echo "======================================================" >> $mail_file
+echo "No. of files been purged : $value" >> $mail_file
+
+mail -s ' SC5 Archive cleanup - Report' noc@quotient.com < $mail_file
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+echo -e "\n starting execution for `date`\n"
+#expected_file="Output_MissingActivationInTransactionMaster_$(date +%m%d%Y).csv"
+expected_file="Output_MissingActivationInTransactionMaster.csv"
+find /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/Input/ -type f -mtime -1 -name $expected_file -exec cp {} /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/ \;
+
+cd /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/
+
+if [ -f $expected_file  ];then
+        echo -e "$expected_file found for processing \n" >> wrapper_log.txt
+else
+        echo -e "$expected_file not found. Skipping the process \n" >> wrapper_log.txt
+        exit
+fi
+
+count=`ls -l $expected_file | wc -l`
+if [ $count -eq 1  ]; then
+        ./execute.sh $expected_file >> wrapper_log.txt
+else
+        echo -e "multiple input files found. Exitting" >> wrapper_log.txt
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+Input_File=$1          # Input file is passed from the command line
+
+echo -e "Starting the reprocess of $Input_File invoking the  missingActivations-0.0.1-SNAPSHOT.jar\n"
+echo -e "Hi All,\n\nPlease see the summary of the reprocessing for missing activations in TM\n" > email_body
+java -jar missingActivations-0.0.1-SNAPSHOT.jar ExtractMissingActivationsJob $Input_File > ALC_$(date +%b%d).log
+UOA_Log="user_offer_activation_logs_extracted_$(date +%Y-%m-%d).log"
+
+if [ -f $UOA_Log ];then
+        C_input=$(expr `cat $Input_File|wc -l` - 1)
+        C_uoa_logs=`cat $UOA_Log |wc -l`
+        C_diff=`expr $C_input - $C_uoa_logs`
+        echo "STEP 1: $UOA_Log file generated\n"
+        if [ $C_uoa_logs -gt 0 ] ; then
+                Output_File=ALC$(date +%d%b)Activations.cpr.out
+                java -DcassandraUsername='sre_user' -DcassandraPwd='$r3_c@$S_0fFL1N3!' -DcassandraHost=10.35.22.101 -DcassandraHost=10.35.22.120 -DhornetQHost=10.35.16.121 -DhornetQUserName=mq.app -DhornetQPassword='r!QmQCL13nT' -DsleepTimeInMs=50 -DdataCenter='SFO' -DlogixFilePath=/SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/$UOA_Log -cp /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/RIQ_Redemption-0.0.6-SNAPSHOT.jar newdomain.CPRActivationJob   >> /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/$Output_File
+                C_out=`cat $Output_File|grep "Processing line"| wc -l`
+                echo -e "STEP 2: Output file $Output_File genrated and $C_out number of recrods reprocessed\n"
+                echo -e "Total number of records from the input file : $C_input \n" >> email_body
+                echo -e "File processed successfully:\nTotal number of records reprocessed: $C_out" >> email_body
+
+        else
+                echo -e "STEP 2: failed, as $UOA_Log does not have any valid records to be processed\n" | tee >> email_body
+
+        fi
+else
+        echo -e "STEP 1: failed, as there is no log file detected from missingActivations-0.0.1-SNAPSHOT.jar process\n" | tee >> email_body
+
+fi
+
+cat email_body | mailx -s " Summary of reprocessing missing activations in TM " BLR-Noc@quotient.com CISupport@quotient.com
+
+mkdir /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/Logs/`date +%Y-%m-%d`
+mv $Input_File $UOA_Log $Output_File ALC_$(date +%b%d).log email_body /SRE_SCRIPTS/Reprocess_Missing_ActivationsTM/Logs/`date +%Y-%m-%d`/
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+UP=$(pgrep nswl | wc -l);
+if [ "$UP" -ne 2 ];
+then
+         echo "The Lighthouse service was Down - Please start Lighthouse service only - runbook https://tinyurl.com/y89vau3s" | mail -s "las-prd-nswl44 $process is down" noc-alerts@quotient.com, NetEng@quotient.com
+else
+        echo "All is well.";
+fi
+
+*************************************************************************************************************************************
+
+host=acgw01
+PathMonth=`date -d "-1 days" '+%b%Y'`
+export SyncPath=/opt/cluster/azBackUp
+export BackupPath=$SyncPath/$PathMonth/$host
+
+### Check if a directory does not exist ###
+if [ ! -d "$BackupPath" ]
+then
+        mkdir -p $BackupPath/{LOGDATA,RAW_LOG_FILE}
+fi
+
+for t in LOGDATA RAW_LOG_FILE
+do
+        export BackupDir=$BackupPath/$t
+        if [ $t == LOGDATA ]
+        then
+                export FileToBackup=`date -d "-1 days" '+%d_%m_%Y' | sed -e 's/0//' -e 's/^0//'`
+                export GZ="$host"LD`date -d "-1 days" '+%d_%m_%Y'`.tgz
+        else
+                export FileToBackup=`date -d "-1 days" '+%d_%m_%Y'`
+                export GZ="$host"RL$FileToBackup.tgz
+        fi
+        cd /opt/cluster/cgw/$t
+        tar zcf $GZ $FileToBackup
+        cp $GZ $BackupDir/
+        rm $GZ
+done
+
+## Upload to azure
+
+/usr/local/sbin/azcopy sync $SyncPath
+
+*************************************************************************************************************************************
+
+*/10 * * * *  bash -x /home/sbargujar/adflush.sh >> /var/log/adflush.log
+
+#!/bin/bash
+{ date; echo "platformjobs sync"; adflush; adreload; id coupons\\platformjobs; }
+
+*************************************************************************************************************************************
+#!/bin/bash
+
+USERNAME="kbb-prd"
+PASSWD="/home/keerthi/.passfile"
+HOSTS="sfo-prd-cep218.sfo.ci.lan dca-prd-cep201.dca.ci.lan"
+COMMAND="hostname && nc -vz 161.247.136.201 443 && nc -vz external-offer-rbs-mmloyalty.ocp.aholdusa.com 443 && nc -vz 10.129.20.101 443"
+for HOSTNAME in ${HOSTS}; do
+        sshpass -f ${PASSWD} ssh -l ${USERNAME} ${HOSTNAME} -o StrictHostKeyChecking=no "${COMMAND}"
+        if [  $? -eq 0  ] ; then
+                echo " " > /dev/null
+        else
+                echo "" > /dev/null
+        fi
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+TIMESTAMP=`date +%Y%m%d-%T`
+PROJECT_HOME=$HOME/Automation_Scripts
+#SERVICES="ir_agent\|apache\|cron\|splunk\|adclient"
+CPU_STAT=`for cpu in $(cat $PROJECT_HOME/service_file_input); do ps -e --cols=80 -o %mem,%cpu,pid,uid,comm | grep $cpu |awk '{m=$1;sum += m;print} END {print "Total CPU "$cpu"%: " sum}'; done | grep Total | awk '{print $1,$2,$7,$8}'`
+MEMORY_STAT=`for memory in $(cat $PROJECT_HOME/service_file_input); do ps -e --cols=80 -o %mem,%cpu,pid,uid,comm | grep $memory |awk '{m=$2;sum += m;print} END {print "Total Memory "$memory"%: " sum}'; done | grep Total | awk '{print $1,$2,$7,$8}'`
+#USAGE=$(ps -e -o %mem,%cpu,pid,uid,comm | grep $SERVICES;)
+CPU=$(sar 1 1 | tail -n -2 | head -1 | awk '{print 100-$9}' | sed 's/\.[0-9]*$//')
+MEMORY=$(free | grep Mem | awk '{print $3/$2*100}' | sed 's/\.[0-9]*$//')
+UPTIME=$(uptime)
+DISKIO=$(iostat -d | grep s)
+TEMP_OUTPUT=$PROJECT_HOME/cmd_output.txt
+FINAL_OUTPUT=$PROJECT_HOME/final_output.txt
+
+echo -e "Time:  $TIMESTAMP" > $TEMP_OUTPUT
+echo -e "Uptime: $UPTIME"  >> $TEMP_OUTPUT
+echo -e "Disk Stat: $DISKIO" >> $TEMP_OUTPUT
+
+if [[ $CPU -gt "80" ]] || [[ $MEMORY -gt "80" ]]; then
+
+        echo "Something wrong kindly check"
+        echo "$CPU_STAT" >> $TEMP_OUTPUT
+        echo "$MEMORY_STAT" >> $TEMP_OUTPUT
+        mail -s "$hostname" masingh@quotient.com,slewis@quotient.com -r sre@quotient.com  < $TEMP_OUTPUT
+
+        cat $TEMP_OUTPUT >> $FINAL_OUTPUT
+else
+        echo "All looks good"
+fi
+
+*************************************************************************************************************************************
+
+nslookup sftp.coupons.com | grep -e "ca1" | head -1 | cut -f 2 | sed -e 's/.*sftp.\(.*\).coupons.com.*/\1/'
+
+nslookup sftp.coupons.com | grep -e "ca1" | head -1 | cut -f 2 | awk -v FS="(sftp.|.coupons.com.)" '{print $2}'
+
+nslookup sftp.ca1.coupons.com | grep -e "ca1" -e "va1" | head -1 | cut -f 2 | grep -o "ca1"
+
+nslookup intelligence.couponsinc.com | grep -e "ca1" -e "va1" | head -1 | cut -f 2 | cut -d '.' -f 2
+
+#!/bin/bash
+
+END_POINT="sftp.coupons.com"
+VALIDATION=`nslookup "${END_POINT}" | grep -e "ca1" -e "va1" | head -1 | cut -f 2 | sed -e 's/.*sftp.\(.*\).coupons.com.*/\1/'`
+
+for k in ${VALIDATION}; do
+        if [ "$k" == "ca1" ]; then
+                echo "$END_POINT Traffic is in SC5."
+        elif [ "$k" == "va1" ]; then
+                echo "$END_POINT Traffic is in IAD. Please move it to back to SC5." | mail -s "Traffic status for $END_POINT" kbb@quotient.com
+        fi
+done
+
+*************************************************************************************************************************************
+#!/bin/bash
+
+END_POINTS=( us.coupons.com internal.coupons.com cpa.coupons.com origin-cdn.coupons.com smsservice.coupons.com insight.coupons.com sftp.coupons.com bcapi.coupons.com intelligence.couponsinc.com )
+
+for k in ${END_POINTS[@]}; do
+        VAD=`nslookup "${k}" | grep -e "ca1" -e "va1" | head -1 | cut -f 2 | cut -d '.' -f 2`
+        if [ "$VAD" == "ca1" ]; then
+                echo "$k Traffic is in SC5."
+        elif [ "$k" == "va1" ]; then
+                echo "${END_POINTS} Traffic is in IAD. Please move it to back to SC5." #| mail -s "Traffic status for $END_POINT" kbb@quotient.com
+        fi
+done
+
+*************************************************************************************************************************************
+#!/bin/bash
+
+#SFOPN1=$(bash /home/kbb-prd/bind/autodns.sh)
+#SFOPN2=$(bash /home/kbb-prd/bind/autodns.sh)
+#SFOPRD=$(bash "path")
+#DCAPRD=$(bash "path")
+SFOPN1_HOST="sfo-pn1-dns01.pn1.ci.lan"
+SFOPN2_HOST="sfo-pn2-dns01.pn2.ci.lan"
+SFOPRD_HOST="sfo-prd-dns01.sfo.ci.lan"
+DCAPRD_HOST="dca-prd-dns01.dca.ci.lan"
+USERNAME="root"
+PASSWD="/home/keerthi/.root-pass"
+COMMAND="hostname && w"
+
+echo "Please choose the below options in number format"
+
+select dns in SFO-PN1-DNS01 SFO-PN2-DNS01 SFO-PRD-DNS01 DCA-PRD-DNS01 Quit
+do
+        case $dns in
+        SFO-PN1-DNS01 )
+                sshpass -f ${PASSWD} ssh -l ${USERNAME} ${SFOPN1_HOST} -o StrictHostKeyChecking=no "${COMMAND}"
+                #sshpass -f ${PASSWD} ssh -l ${USERNAME} ${SFOPN1_HOST} -o StrictHostKeyChecking=no "${SFOPN1}"
+                ;;
+        SFO-PN2-DNS01 )
+                sshpass -f ${PASSWD} ssh -l ${USERNAME} ${SFOPN2_HOST} -o StrictHostKeyChecking=no "${COMMAND}"
+                #sshpass -f ${PASSWD} ssh -l ${USERNAME} ${SFOPN2_HOST} -o StrictHostKeyChecking=no "${SFOPN2}"
+                ;;
+        SFO-PRD-DNS01 )
+                #sshpass -f ${PASSWD} ssh -l ${USERNAME} ${SFOPRD_HOST} -o StrictHostKeyChecking=no "${COMMAND}"
+                ;;
+        DCA-PRD-DNS01 )
+                #sshpass -f ${PASSWD} ssh -l ${USERNAME} ${DCAPRD_HOST} -o StrictHostKeyChecking=no "${COMMAND}"
+                ;;
+        Quit)
+                echo "Thank you..!"
+                exit
+                ;;
+        * )
+                echo "Invalid selection";;
+esac
+done
+
+*************************************************************************************************************************************
+
+ #!/bin/bash
+
+ # Here you define the absolute path of your script
+
+ scriptPath="/home/user/pathScript/"
+
+ # Name of your script
+
+ scriptName="myscript.sh"
+
+ # Here you execute your script
+
+ $scriptPath/$scriptName
+
+
+*************************************************************************************************************************************
+
+node_key_url="https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+local_node_key="$keyring/nodesource.gpg"
+
+if [ -x /usr/bin/curl ]; then
+    exec_cmd "curl -s $node_key_url | gpg --dearmor | tee $local_node_key >/dev/null"
+else
+    exec_cmd "wget -q -O - $node_key_url | gpg --dearmor | tee $local_node_key >/dev/null"
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+servers=$(cat /home/kbb/sc5_pai_p.txt)
+
+echo -n "Enter the action 'start/stop/restart/status' : "
+read action
+echo -n "Enter the user name : "
+read user_name
+
+for i in $servers ; do
+        echo $i
+        pssh -h $i -p 1 -t 0 -x '-t -t' -l $user_name -A -i "hostname; systemctl $action tomcat9;"
+done
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+USERNAME="root"
+SFO_PWD1="/home/keerthi/.passwd/.sfo_1st_passwd"
+SFO_PWD2="/home/keerthi/.passwd/.sfo_2nd_passwd"
+DCA_PWD1="/home/keerthi/.passwd/.dca_1st_passwd"
+DCA_PWD2="/home/keerthi/.passwd/.dca_2nd_passwd"
+CMD="hostname && w"
+#CMD="sudo killall -9 splunkd ;sudo /etc/init.d/splunk status;sudo  /etc/init.d/splunk start"
+
+echo "Please choose the below options in number format"
+
+select splunk in SFO-PRD-WSRT SFO-PRD-NGW SFO-PRD-REST SFO-PRD-KCON SFO-PRD-CEP DCA-PRD-WSRT DCA-PRD-NGW DCA-PRD-REST DCA-PRD-KCON DCA-PRD-CEP Quit
+do
+        case $splunk in
+                SFO-PRD-WSRT )
+                        echo "Restarting sfo wsrt splunk service. Please wait"
+                        for k in {10.35.12.117,10.35.12.118,10.35.12.119,10.35.12.120,10.35.12.121,10.35.12.122,10.35.12.123,10.35.12.124,10.35.12.125}; do sshpass -f ${SFO_PWD1} ssh $k -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}"; done
+                        echo "Restart is completed on sfo wsrt servers."
+                        break ;;
+                SFO-PRD-NGW )
+                        echo "Restarting sfo ngw splunk service. Please wait"
+                        for k in {201..220}; do sshpass -f ${SFO_PWD1} ssh sfo-prd-ngw$k.sfo.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on sfo ngw servers."
+                        break ;;
+                SFO-PRD-REST )
+                        echo "Restarting sfo rest splunk service. Please wait"
+                        for k in {201..250}; do sshpass -f ${SFO_PWD2} ssh sfo-prd-rst$k.sfo.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on sfo rest servers."
+                        break ;;
+                SFO-PRD-KCON )
+                        echo "Restarting sfo kcon splunk service. Please wait"
+                        for k in {10.35.15.101,10.35.14.178,10.35.14.179,10.35.14.182,10.35.14.186,10.35.14.187,10.35.14.188,10.35.14.189}; do sshpass -f ${SFO_PWD1} ssh $k -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}"; done
+                        echo "Restart is completed on sfo kcon servers."
+                        break ;;
+                SFO-PRD-CEP )
+                        echo "Restarting sfo cep splunk service. Please wait"
+                        for k in {201..220}; do sshpass -f ${SFO_PWD1} ssh sfo-prd-cep$k.sfo.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on sfo cep servers."
+                        break ;;
+                DCA-PRD-WSRT )
+                        echo "Restarting dca wsrt splunk service. Please wait"
+                        for k in {117..126}; do sshpass -f ${DCA_PWD1} ssh 10.55.12.$k -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on dca wsrt servers."
+                        break ;;
+                DCA-PRD-NGW )
+                        echo "Restarting dca ngw splunk service. Please wait"
+                        for k in {201..220}; do sshpass -f ${DCA_PWD1} ssh dca-prd-ngw$k.dca.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on dca ngw servers."
+                        break ;;
+                DCA-PRD-REST )
+                        echo "Restarting dca rest splunk service. Please wait"
+                        for k in {201..240}; do sshpass -f ${DCA_PWD2} ssh dca-prd-rst$k.dca.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on dca rest servers."
+                        break ;;
+                DCA-PRD-KCON )
+                        echo "Restarting dca kcon splunk service. Please wait"
+                        for k in {10.55.14.187,10.55.14.188,10.55.14.189,10.55.14.190,10.55.14.207,10.55.14.208,10.55.14.209,10.55.14.218}; do sshpass -f ${DCA_PWD1} ssh $k -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}"; done
+                        echo "Restart is completed on dca kcon servers."
+                        break ;;
+                DCA-PRD-CEP )
+                        echo "Restarting dca cep splunk service. Please wait"
+                        for k in {201..220}; do sshpass -f ${DCA_PWD1} ssh dca-prd-cep$k.dca.ci.lan -l ${USERNAME} -o StrictHostKeyChecking=no "${CMD}" ; done
+                        echo "Restart is completed on dca cep servers."
+                        break ;;
+                Quit)
+                        echo "Thank you..!"
+                        exit
+                        ;;
+                * )
+                        echo "Invalid selection";;
+        esac
+done
+
+*************************************************************************************************************************************
+
+# Print Operating system to on onscreen
+ echo "Your Operating System is $name Linux"
+ #Using function to store multiple command.
+ function Ubuntu_Apache () {
+   echo "Apache Server installation Start"
+   sudo apt install apache2 -y
+   sudo ufw allow 'apache2'
+   sudo ufw allow 80/tcp
+   sudo ufw allow 443/tcp
+   sudo systemctl restart httpd
+   sudo systemctl enable apache2
+   echo "Apache Server installation has been completed"
+ }
+
+************************************************************************************************************************************* 
+
+ export FILEPATH=/home/masingh-prd/pssh
+
+if [[ "$datacenter" == "$SFO" ]] || [[ "$datacenter" == "SFO" ]]; then
+   echo "sfo"
+   export HOMEDIR=$FILEPATH/$datacenter/
+elif [[ "$datacenter" == "$DCA" ]] || [[ "$datacenter" == "DCA" ]]; then
+   echo "dca"
+   export HOMEDIR=$FILEPATH/$datacenter/
+elif [[ "$datacenter" == "$IAD" ]] || [[ "$datacenter" == "IAD" ]]; then
+   echo "iad "
+   export HOMEDIR=$FILEPATH/$datacenter/
+elif [[ "$datacenter" == "$SC5" ]] || [[ "$datacenter" == "SC5" ]]; then
+        echo "sc5"
+        export HOMEDIR=$FILEPATH/$datacenter/
+else
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+#Asking Login Credential 
+read -p "Enter the Username: " user
+read -sp "Enter the Password: " pass
+while read host
+do
+# Login and Installation Process
+sshpass -p $pass ssh -o StrictHostKeyChecking=no $user@$host << EOF
+    wget http://kr.archive.ubuntu.com/ubuntu/pool/universe/libn/libnagios-plugin-perl/libnagios-plugin-perl_0.36-2_all.deb
+    dpkg -i libnagios-plugin-perl_0.36-2_all.deb
+    wget http://cz.archive.ubuntu.com/ubuntu/pool/universe/libc/libconfig-tiny-perl/libconfig-tiny-perl_2.23-1_all.deb
+    dpkg -i libconfig-tiny-perl_2.23-1_all.deb
+    wget http://cz.archive.ubuntu.com/ubuntu/pool/main/libc/libclass-accessor-perl/libclass-accessor-perl_0.34-1_all.deb
+    dpkg -i libclass-accessor-perl_0.34-1_all.deb
+    wget http://security.ubuntu.com/ubuntu/pool/main/p/perl/perl_5.22.1-9ubuntu0.6_amd64.deb
+    dpkg -i perl_5.22.1-9ubuntu0.6_amd64.deb
+    wget http://cz.archive.ubuntu.com/ubuntu/pool/universe/libm/libmath-calc-units-perl/libmath-calc-units-perl_1.07-1_all.deb
+    dpkg -i libmath-calc-units-perl_1.07-1_all.deb
+    sudo apt-get install locales -y 
+    apt --fix-broken install -y
+    exit
+EOF
+echo Package Installation has been done in Server $host
+done < host.txt
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+READ_FILE=`tail -n -50000 /var/log/nagios3/nagios.log | grep -e "processes ir_agent;CRITICAL"`
+echo "$READ_FILE" > /home/kbb-prd@ci.lan/rapid_logs
+
+if [ $? -eq 0 ]; then
+        mail -s "ir_agent:CRITICAL" kbb@quotient.com < "/home/kbb-prd@ci.lan/rapid_logs"
+else
+        echo "All is well.."
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+NOW=$( date '+%s' )
+REF=$(( $NOW - 15*60 )) ##previous 15 minute
+
+while read MONTH DAY HMS A4 ; do
+
+TIMESTAMP=$(date --date "${MONTH} ${DAY} ${HMS}" '+%s')
+if [ "$TIMESTAMP" -ge "$REF" ] ; then
+echo "${MONTH} ${DAY} ${HMS} ${A4}"
+fi
+
+done < /var/log/kern.log | grep "server imagerepo.iad.ci.lan not responding" > /home/praja-prd/sync.txt  2>&1
+if grep -F "server imagerepo.iad.ci.lan not responding" "/home/praja-prd/sync.txt"; then
+cat  /home/praja-prd/sync.txt  |  mail -s "NFS issue in IAD-PRD-CDN server" sre@quotient.com
+fi
+
+*************************************************************************************************************************************
+
+#!/bin/bash
+
+## Author = Quotient SRE
+## Date 29 June 2023
+CRED="bWFzaW5naDojUVRCYU5TckVAMzQ2MQ=="
+API_URL="https://asset01.corp.quotient.com/services/data/v1.0/query"
+DC_SFO=sfo-prd
+DC_DCA=dca-prd
+DC_IAD=iad-prd
+DC_SJC=sjc-prd
+DC_PN1=sfo-pn1
+DC_PN2=sfo-pn2
+INVENTORY_PATH="/etc/ansible"
+INVENTORY_FILE="hosts"
+### SFO
+echo "[$DC_SFO]" > $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'%$DC_SFO%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+sleep 5
+### DCA
+
+echo "[$DC_DCA]" >> $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'$DC_DCA%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+sleep 5
+### IAD
+
+echo "[$DC_IAD]" >> $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'%$DC_IAD%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+sleep 5
+
+### SJC
+
+echo "[$DC_SJC]" >> $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'%$DC_SJC%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+sleep 5
+
+### PN1
+
+echo "[$DC_PN1]" >> $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'$DC_PN1%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+
+### PN2
+
+echo "[$DC_PN2]" >> $INVENTORY_PATH/$INVENTORY_FILE
+curl -X GET -k -H "Authorization: Basic $CRED"  "$API_URL/?query=SELECT%20name%20FROM%20view_device_v1%20WHERE%20type%20ILIKE%20'%virtual%'%20AND%20name%20ILIKE%20'$DC_PN2%'%20AND%20os_name%20ILIKE%20'%ubuntu%'%20AND%20in_service='t'" >> $INVENTORY_PATH/$INVENTORY_FILE
+
+###
+###
+
+cat >> /etc/ansible/hosts <<EOL
+[sfo-prd:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/sfo/sfo-prd
+nagios_server=sfo-prd-nag201
+colo=sfo
+
+[dca-prd:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/dca/dca-prd
+nagios_server=dca-prd-nag201
+colo=dca
+
+[iad-prd:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/iad/iad-prd
+nagios_server=iad-prd-nag102
+colo=iad
+
+[sjc-prd:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/sc5/sc5-prd
+nagios_server=sjc-prd-nag102
+colo=sc5
+
+[sfo-pn1:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/sfo/sfo-pn1
+nagios_server=sfo-pn1-nag201
+colo=pn1
+
+[sfo-pn2:vars]
+ansible_ssh_private_key_file=/root/.ssh/keys/sfo/sfo-pn2
+nagios_server=sfo-pn2-nag201
+colo=pn2
+EOL
+
+*************************************************************************************************************************************

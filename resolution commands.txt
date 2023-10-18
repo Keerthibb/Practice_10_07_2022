@@ -1,0 +1,180 @@
+dpkg --purge $(dpkg -l linux-{image,image-extra,headers}-"[0-9]*" | awk '/^ii/{print $2}' | grep -ve "$(uname -r | sed -r 's/-[a-z]+//')")
+dpkg --configure -a
+apt-get -f install
+apt-get --yes autoremove
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Nagios configuration
+
+hosts.cfg
+hostgroup.cfg
+servicegroups.cfg
+service.cfg
+command.cfg
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+ls -la receipt.2022-0{8..9}-{0..2}{1..5}*
+
+The possible values for role are as follows for redis:
+
+X sentinel
+C RDB/AOF writing child
+S slave
+M master
+
+redis-cli -p 7986
+
+redis-cli -p 7986 cluster info
+
+cluster info
+
+redis-cli -p 7986 cluster nodes | grep connected | wc -l
+
+redis-cli -p 7986 info all | grep connected
+
+cluster nodes
+
+/home/kafka/kafka/bin/kafka-consumer-groups.sh --bootstrap-server 10.55.12.205:10002,10.55.12.206:10002,10.55.12.207:10002,10.55.12.241:10002,10.55.12.242:10002 --group redeemedList_group --describe
+Consumer group `redeemedList_group` is rebalancing.
+
+sed -i -e 's/false/true/g' /etc/default/sysstat;sleep 1;service sysstat restart;sleep 1;sar -q;
+
+ps -eo pid,cmd,lstart | grep 28719 | tail -1
+
+cat /opt/cpr/tcserver/cpr-instance-8080/bin/setenv.sh | grep -i heap || grep "HEAP_SIZE=" /data/tomcat/apps/ATC_RT/bin/setenv.sh
+
+Memory info for tahoe Redis
+redis-cli -c -h 10.80.112.19 -p 7986 info memory | grep peak
+
+Redis Memory Usage
+redis-cli -p 7986 info Memory | grep used_memory_rss
+
+redis-cli -p 7986 info Persistence | grep aof ||  redis-cli -p 7986 info Persistence | grep aof_current_size
+
+root@sfo-pn1-kafk01:/# /home/kafka/kafka/bin/kafka-consumer-groups.sh --bootstrap-server 10.36.4.141:10002 --list
+
+iisreset
+iisreset /stop
+iisreset /start
+iisreset /status
+
+awk 'NR==2309,NR==2360 { print NR,$0 }' filename --> To range the data in a file.
+
+pstree
+
+apt-get install failed
+
+adreload
+sudo apt-get install --fix-missing ssh
+sudo dpkg --configure -a
+sudo apt-get update
+adreload
+adflush
+
+show session all filter source 208.23.227.252 
+
+name=$(egrep '^(NAME)=' /etc/os-release | cut -d'=' -f2 | cut -d'"' -f2 | awk '{print $1}')
+
+/opt/MegaRAID/perccli/perccli64 /c0 show all --> To check the raid
+cat /etc/network/interfaces
+
+sed -i -e 's/false/true/g' /etc/default/sysstat;sleep 1;service sysstat restart;sleep 1;sar -q;
+
+=================================================Ansible push=========================================================
+
+ansible-playbook -i ubuntu20-hosts.yml --limit=sfo-prd-utl201 ubuntu20-action.yml -e "riq_env=sfo" -vvvv  => For pushing DC
+
+ansible-playbook -i ubuntu20-hosts.yml --limit=sfo-pn1-rdst201,sfo-pn1-rdst202,sfo-pn1-rdst203,sfo-pn1-rdst204,sfo-pn1-rdst205,sfo-pn1-rdst206 ubuntu20-action.yml -e "riq_env=pn1"
+
+ansible-playbook nagios_client.yml -i inventory/ci_riq.yml --limit=sfo-pn1-rdst201,sfo-pn1-rdst202,sfo-pn1-rdst203,sfo-pn1-rdst204,sfo-pn1-rdst205,sfo-pn1-rdst206 => For nagios client installation
+
+=========================================================================================================================
+
+Google cloud storages
+1.Standard -> For data accessed frequently access [Highest price]
+2.Nearline -> For data accessed in once in a month or less [Lower price]
+3.Coldline -> For data accessed once a year or less [Lowest price]
+4.Archive -> For accessing once a year or less.
+
+
+
+TEMP.T.EPE.CEP.OFFER_ACTIVATED.PARTNER_ACTIVATION.REQ
+
+TEMP.T.EPE.CEP.OFFER_ACTIVATED.CONTINUITY_REWARD.REQ
+
+Q.EPE.CEP.OFFER_ACTIVATED.CONTINUITY_REWARD.REQ
+
+TEMP.Q.EPE.CEP.OFFER_ACTIVATED.PARTNER_ACTIVATION.REQ1
+
+TEMP.Q.EPE.CEP.OFFER_ACTIVATED.CONTINUITY_REWARD.REQ1
+
+Each temp queue should have 80K to 1 lakh
+
+If more than 3 temp queues, we can create another address
+
+TEMP.T.EPE.CEP.PARTNER_INTEGRATION.REQ --> Address for Temp queue  {java.lang.String}
+
+TEMP.T.EPE.CEP.PARTNER_INTEGRATION.REQ
+
+TEMP.Q.EPE.CEP.PARTNER_INTEGRATION.REQ1
+
+TEMP.Q.EPE.CEP.PARTNER_INTEGRATION.REQ2
+
+TEMP.Q.EPE.CEP.PARTNER_INTEGRATION.REQ3
+
+TEMP.Q.EPE.CEP.PARTNER_INTEGRATION.REQ3
+
+======================================================================
+Failing at apt-get install step
+adreload
+sudo apt-get install --fix-missing ssh
+sudo dpkg --configure -a
+sudo apt-get update
+adreload
+adflush
+======================================================================
+
+show interfaces xe-2/0/3 | match last
+
+show interfaces | grep xe-2/0/3
+
+show interfaces descriptions 
+
+show interfaces | match " Last flapped "
+
+show interfaces descriptions | grep down
+
+show bgp summary
+
+show interfaces descriptions | match ISP 
+
+show log messages | match xe-1/0/0 
+
+======================================================================
+
+
+/var/www-external/bussys/cpa/pod/36/455
+root@iad-prd-cdn01:/var/www-external/bussys/cpa/pod/36/455#
+
+/var/www-external/bussys/cpa/pod/36/455
+root@sjc-prd-cdn01:/var/www-external/bussys/cpa/pod/36/455#
+
+======================================================================
+
+sudo apt-get install rsyslog  
+sudo apt install sysstat
+sudo systemctl start sysstat
+sudo systemctl status sysstat
+sudo systemctl enable sysstat
+sudo apt-get -y install cron
+
+apt-get install rsyslog  - restart sshd
+dpkg-reconfigure sysstat - enabled cron
+sudo apt-get -y install cron - no restart
+
+namei -l code.c
+readlink -f apache.yml
+
+

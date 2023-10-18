@@ -1,0 +1,146 @@
+du -sch * | grep G
+tail -f nagios-05-11-2022-00.log
+lsof | grep nagios-05-11-2022-00.log
+gzip nagios-05-09-2022-00.log nagios-05-10-2022-00.log nagios-05-11-2022-00.log
+jobs -l
+bg 1
+jobs -l
+tail -f nagios.log
+lsof | grep nagios.log
+
+*********************************************************************************************************************************************
+
+Log rotation
+
+logrotate -vf /etc/logrotate.conf
+
+Running fuser command without any option will displays the PIDs of processes currently accessing your current working directory.
+
+$ fuser .
+OR
+$ fuser /home/file.name
+
+lsof auth.log [r]fuser auth.log
+
+gzip auth.log.1 [zip the dumped file]
+
+mysql  -e "show all slaves status\G" |grep -E 
+
+*********************************************************************************************************************************************
+du -sch * | egrep 'T|G'
+
+du -sh * | sort -h || du -a /home | sort -rn | head -n 5
+
+du -hs $(ls -A)
+
+du -hsx --exclude=/{proc,sys,dev} /*
+
+for i in dca-prd-dse{02..20};do sshpass -f /home/kbb-prd/rt_pwd ssh -o StrictHostKeyChecking=no root@$i 'df -h;echo "10.55.92.85:/dbbackup_uot /CIBackup_uot nfs _netdev,rw,bg,hard,intr,rsize=65536,wsize=65536,proto=tcp,nfsvers=3,retrans=2,timeo=600 0 0" >> /etc/fstab;mkdir /CIBackup_uot ;mount -a; df -h';done
+
+for i in {201..204}; do sshpass -p 'xwr&7deDLTSfo' ssh sfo-prd-kcon$i.sfo.ci.lan -l root -o StrictHostKeyChecking=no "hostname && /etc/init.d/splunk status && /etc/init.d/splunk stop && /etc/init.d/splunk start && /etc/init.d/splunk status" ;done
+
+for k in {249..250}; do sshpass -f /home/keerthi/.sfo_rst_p.txt ssh sfo-prd-rst$k.sfo.ci.lan -l root -o StrictHostKeyChecking=no "hostname; sudo killall -9 splunkd ;sudo /etc/init.d/splunk status;sudo  /etc/init.d/splunk start"; done
+
+for i in {211..214}; do sshpass -p 'xwr&7deDLTSfo' ssh sfo-prd-kcon$i.sfo.ci.lan -l root -o StrictHostKeyChecking=no "hostname && /etc/init.d/splunk status && /etc/init.d/splunk stop && /etc/init.d/splunk start && /etc/init.d/splunk status" ;done
+
+sshpass -f /home/keerthi/.passfile ssh -l kbb-prd sfo-prd-cep218.sfo.ci.lan -o StrictHostKeyChecking=no
+
+for i in `cat sjc-pdn-cpr`; do sshpass -f /tmp/.ssh-pdnpass ssh -l root $i -o StrictHostKeyChecking=no "hostname && /etc/init.d/cpr-instance-8083 status" ;done
+
+for i in {10.80.112.6,10.80.112.11,10.80.112.7,10.80.112.5,10.80.112.19,10.80.112.14}; do echo $i; redis-cli -h $i -p 7986 info memory | grep used_memory_human ;done
+
+for i in `cat test-vm`; do sshpass  ssh $i -i .ssh/sc5-prd -tt  -l root -o StrictHostKeyChecking=no "uptime && touch test && ls -ltrah test && rm test && ls -ltrah test"; done
+
+pssh -h sfo_kafka_p.txt -p 1 -t 0 -x '-t -t' -l root -A -i "hostname;sudo killall -9 splunkd ;sudo /etc/init.d/splunk status;sudo  /etc/init.d/splunk start"
+
+find /home/ci/logs/ -name "gc-*" -mtime -1 -exec cp -p {} /home/$USERNAME$DN/ \; && ls -Lt /home/$USERNAME$DN/ | head -1 | xargs zip `date +%d-%h-%y-%T`-gc-log.zip"
+
+find $exceeds_thresh -xdev -size +5M -exec ls -lah {} \; | head -n 10
+
+for i in `cat mount-point`; do ssh -i /root/.ssh/sc5-prd root@$i "hostname -f; nslookup isilon-nfs.sc5.coupons.lan | grep -e "Name" -e "Address" " ;done
+
+ps -A | grep find | awk '{print $1}' | wc -l
+
+find . -type f -name "*.gz" -mtime +35 -exec rm -rf {} \;
+
+find  -type f  -name "*.txt" -mtime +35 -exec gzip {} \;
+
+redis-cli -h 10.35.14.183 -p 7986 cluster info
+
+redis-cli -h 10.35.14.183 -p 7986 cluster nodes
+
+for d in /*; do egrep " ${d} " /proc/mounts > /dev/null || du -sh ${d}; done
+
+for i in `cat sjc`; do sshpass -p 'Sc%n35scal34' ssh root@$i "adleave -rf corp.coupons.com; adjoin -w corp.coupons.com -u gcuser -p AddT0D0ma1N;adinfo"; done
+
+for host in $(cat cpr.txt); do sshpass -f .passfile ssh -o StrictHostKeyChecking=no masingh@$host '( hostname && cat /etc/hosts )' >> cpr_output; done
+
+truncate -s 0 filename
+
+ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%cpu | head -5
+
+fc -l 55 75 --> History commands ranges
+
+sudo -U ansible -l
+
+cp $(ls -SF | grep -v / | head -5) Directory
+
+ls -SF | grep -v / | head -5 | xargs -I{} cp "{}" Directory
+
+ps -p {pid} -o lstart --> Process start command
+
+sed -i 's/sfo-pn2-igen11/sfo-pn2-igen12/g' db.pn2.ci.lan ==> Command is used to replace
+
+mailq | wc -l
+
+for n in {121..136} ; do host 10.35.24.$n localhost | grep pointer ; done
+
+#alias login='sshpass -f /home/username/.passfile ssh -o stricthostkeychecking=no'
+
+#export amy='sshpass -f /home/keerthi/.passfile ssh -o stricthostkeychecking=no'
+
+echo "This is the body of the email" | mail -s "This is the subject line" your_email_address
+
+sed -i -e 's/false/true/g' /etc/default/sysstat;sleep 1;service sysstat restart;sleep 1;sar -q;
+
+ps -p 1 -wo pid,lstart,cmd # ps -p 1 -p $$ -wo user,pid,%cpu,%mem,vsz,rss,tty,stat,lstart,cmd
+
+ps -C airflow -o %cpu,%mem,time,cmd
+
+route | grep default | awk '{print $2}'  --> To check the default gateway
+ 
+mkdir -m777 directory_name
+
+for i in {80..83}; do /etc/init.d/cpr-instance-80$i status; done
+
+cut -c 5-9 /etc/passwd ||  cut -c 5- /etc/passwd| Print the lines with using cut command
+
+cut -c -5 /etc/passwd --> To display the first five characters in the file
+
+cut -c 1,3,5 /etc/passwd
+
+grep '^This' sed1.txt || grep 'This$' sed1.txt.  ^ Indicates first and $ indicates last. --> grep -w 'This' sed1.txt | We are looking for only word.
+
+hostnamectl set-hostname <new hostname>
+
+To check these informarion
+
+show full processlist;
+
+mysql  -e "show all slaves status\G" | grep Slave
+mysql  -e "show all slaves status\G" |grep -E "Connection|Slave_SQL_Running|Slave_IO_Running|Seconds_Behind_Master|Last_SQL_Errno|Last_SQL_Error|Exec_Master_Log_Pos"
+tail -f /var/log/mysql/repl_*
+
+watch -n 5 df -Th .
+
+ps -elf | grep 'process name' | awk '{print $4}' | xargs kill -9        
+
+ssh -o StrictHostKeyChecking=no ansible@192.168.0.110
+
+for i in ` cat t.txt`;do  echo +++$i.retaileriq.com++++ ;  nslookup $i.pdn.retaileriq.com; done 
+
+curl -VI URL
+
+for n in {1..200} ; do host newcpr-int-lb 10.35.4.111 >> /home/kbb-prd@ci.lan/dns081222; done && sleep 5 && for n in {1..200} ; do host newcpr-int-lb 10.35.4.112 >> /home/kbb-prd@ci.lan/dns081222; done && for n in {1..200} ; do host newcpr-int-lb 10.35.4.23 >> /home/kbb-prd@ci.lan/dns081222; done && for n in {1..200} ; do host newcpr-int-lb 10.35.4.22 >> /home/kbb-prd@ci.lan/dns081222; done && for n in {1..200} ; do host newcpr-int-lb 10.35.4.21 >> /home/kbb-prd@ci.lan/dns081222; done
+
+

@@ -1,0 +1,494 @@
+-v --> Task results
+-vv --> Configuartion and Task results
+-vvv --> Information about connection managed host
+-vvvv --> Information about plugins, which script and name of the script
+
+Welcome@321$%^
+
+ssh-keygen --> To generate the sssh keys
+
+ssh-copy-id username@ip-address
+
+ansible-inventory --list -y
+
+ansible-inventory --graph -y
+
+ansible all -m ping -u root || ansible db:web -m ping -u ansible -v || ansible-playbook -i /home/keerthi/ansible/hosts ping_lat.yml -u ansible -v
+
+ansible all -a "df -h" -u root
+
+ansible servers -a "uptime" -u root
+
+ansible server1:server2 -m ping -u root 
+
+Winrm[Windows] and openssh[Linux] are used to connect the hosts.
+
+Modules --> Library files.
+
+Inventory --> We will have manged the hosts or servers.
+IP or Server name or FQDN
+
+Static inventory --> Text or Yaml format [default inventory file] path: /etc/ansiblehost {Global file}
+Dynamic inventory -->
+
+
+[Linuxservers]
+server[a:d]  {defining the server range}
+
+[Webservers]
+10.10.34.[1:99] {defining the IP range}
+
+ex: anisble --list-hosts web
+
+[db]
+192.168.[250:252]:[1:100]
+
+[Ansible:children]
+Linuxservers
+webserver
+
+[Master:children]
+db
+
+[mssql]
+192.168.0.[1:5]
+
+[mysql]
+192.169.0.[7:9]
+
+[oracle:children]
+mssql
+
+[cassandra:children]
+mysql
+
+ansible --list-hosts ungrouped
+
+anisble-inventory --graph -i inventory [Specific created inverntory file.]
+
+==> Inventory file priority it should take the current directory, then it will select the next one.
+
+ansible-doc -l ==>  To print the modules. ||  ansible-doc group
+
+===============================================================Adhoc commands=============================================================================
+
+ansible web:db -m command -a "id ansible" -u ansible  ==>  Checking the user id in the remote host.
+
+
+Inventory:
+
+A list of hosts or group of hosts
+The default location for the host inventory file is /etc/ansible/hosts
+
+The ansible* commands will use a different host inventory file when they are
+used with the --inventory PATHNAME option, -i PATHNAME for short
+
+Modules:
+Modules are the programmes that perform the actual work of the tasks of a play
+There are over 500 core modules.
+
+Tasks:
+The goal of play is to map group of hosts to some well defined roles,
+represented by things ansible calls tasks. At a basic level, a task is nothing more than acall to an ansible module.
+
+--> YAML files optionally begin and end with a three dash(---)
+--> Next immediate line starts with single dash(-). Name is optional here
+--> Hosts expect value like all or group.
+--> Do you want to become a root on target servers uses become
+--> What action do you want to perform? Specify under tasks
+
+****************************To check the syntax of the file
+ansible-playbook --syntax-check filename.yml
+ex: ansible-playbook --syntax-check ping.yml
+
+ansible-playbook -vvvv filename.yml
+
+ansible-playbook -C filename.yml ==> Dry run
+
+ex: 
+
+---
+- name: <descryption>
+hosts: all
+user: ansible
+become: true
+
+tasks: 
+yum:
+name: nginx
+state: latest
+
+service:
+name: nginx
+state: started
+
+*************************************************************************************************************************************************
+Ansible is a push mechanism
+
+ansible-playbook abc.yml --check --> To check and validate the yml file..
+
+ansible-playbook -i hosts <play book name> ||  ansible-playbook -i hosts apt-update.yml -u ansible
+
+->   ansible web:db -m command -a "sudo apt update" -b -u ansible -v
+->   ansible qa -b -m apt -a "pkg=nginx state=latest" --> To update
+->   ansible qa -b -m apt -a "pkg=nginx state=absent" --> To uninstall
+->   ansible qa -b -m apt -a "pkg=nginx state=present"  --> To install
+->   ansible qa -b -m service -a "name=httpd state=started" --> (start)
+->   ansible qa -b -m service -a "name=httpd state=absent" --> (stop)
+->   ansible qa -b -m user -a "name=keerthi"
+->   ansible qa -b -m copy -a "src=filename dest=/tmp"
+->   ansible db -m command -a "service nginx status" -b -u ansible
+-> ansible web:db -b -m copy -a "src=/home/keerthi/ansible/apt-update.yml dest=/home/ansible" -u ansible -v
+
+=> ansible web:db -m command -a "tail -10 /etc/passwd" -u ansible -v
+
+=> ansible -u ansible -i hosts server2 --ask-pass -m raw -a "sudo apt update -y" -v
+
+
+ansible all -m user -a "name=Keerthi"
+ansible all -m command -a "id keerthi"
+'name=keerthi state=absent'
+
+ansible -u ansible -i inventtory ansiblenode2 --ask-pass -m raw -a "apt install git -y"
+
+raw module --> Without python
+
+Variables are defined in double braces " {{ web_package }}  "
+We will not use double braces in conditions
+
+If the variable is defined in first element it should be defined in double quotes "{{ web_package }}"
+
+Variable precednce
+
+Different type of scopes
+1) Global scope :  Whenever we are setting in inventory or through command line
+2) Play scope: This is applied in play
+3) Host scope: Whenever we use Inclusion files.
+
+Managing your host variables
+variables can be assigned to particular host or group of host
+
+
+/myproject/group_vars/webservers
+"project"    "lamp"   
+
+ansible-inventory -i inventory site.yml -u ansible -v
+ansible-playbook -i inventory site.yml -u ansible -v
+ansible-playbook -i inventory site.yml -e "webserver_package=mysql" -u ansible -v
+ansible-playbook -i inventory site.yml -e "web_package=mysql" -u ansible -v
+
+If we are passing the variable through CMD line it will over ride the input from the file  {Global values}
+
+ansible-playbook -i inventory site.yml -e "web_package=mysql" -e "web_service=maria_db" -u ansible -v
+
+--> Multi valued variables
+
+
+Multi-value variables
+
+Arrays[lists]or dictonary
+
+user1_first_name: Keerthi
+user1_last_name: Kumar
+user1_home_dir: /users/kkumar
+user2_first_name: Appi
+user1_last_name: BB
+user1_home_dir: /users/abb
+
+
+Arryas
+users:
+kkumar:
+first_name: Keerthi
+last_name: Kumar
+home_dir: /users/kkumar
+
+users.kkumar.first_name
+
+users ['Keerthi'] ['firstname']
+
+Dictionary
+users:
+linda:
+username: linda
+shell: /bin/bash
+sneha:
+username: sneha
+shell: /bin/sh /
+
+linda:{username: 'linda',shell: '/bin/bash'}
+sneha:{username: 'sneha', shell: '/bin/bash'}
+
+We can't use loops in dictionaries
+
+Arrays
+users:
+- username: sneha
+  shell: /bin/bash/
+- username: preethi
+  shell: '/bin/sh'
+
+we can access all variables using loops
+
+=========> Playbook contents================
+
+Ansible playbook can have one or ore of the following items in it
+
+-> Variable
+-> Tasks
+-> Files
+-> Templates
+-> Modules
+-> Handlers
+
+*) Ansible variables
+Ansible variables can be classified into two categories
+->System defined variables(built-in variables):
+hostvars, groupd, group_names etc..,
+
+-> User defined variables(Custom variables):
+myvar, var, var220 etc..,
+
+### Variable with arrays
+You can use arrays and assign them to variables as shown in the syntax below:
+
+---
+- hosts: all
+  vars:
+   students:
+   - Mask
+   - Monalisa
+   - Avi
+   - Amy
+   tasks:
+   -name: Ansible List variable example
+    debug:
+	msg: "{{ students[2]}}"
+...
+
+
+### Varaibles with dictionaries
+
+---
+- name: This is variable with array example
+  hosts: all
+  vars:
+    Team:
+      DBT:
+        MYSQL: MYSQLDB
+        MSSQL: MSSQLDB
+      DEVOPS:
+        IAAS: Terraform
+        PAAS: APACHE
+  tasks:
+   - name: Ansible dictionary
+     debug:
+             msg: "{{ Team }}"
+			 
+			 	 
+			 
+ansible-playbook -i hosts line_change.yml -become -u ansible  #While running the we can use -become
+
+ansible-playbook -i hosts line_change.yml -e status=starting -become -u ansible  #Without changing the file we can directly give the input
+
+ansible-playbook -i hosts --limit=server1 new_line.yml -u ansible -vvv
+
+==========================Changing the strings in the line====================================================================
+
+---
+- name: Chnaging the lines
+  hosts: all
+  tasks:
+    - name: Ansible replacing string example
+      replace:
+        path: /home/ansible/Hello/test.py
+        regexp: SELINUX=Restarting
+        replace: SELINUX=Running
+		
+==============================================================================================
+
+=> Variables in inventory file
+If you have different host systems that share similar attributes or values, you can define what we call group variables.
+These are used to assign the attributes which are common to all the hosts.
+
+==========> Hosts and Group variables
+
+================> Condtional operator with variables <==============================================================================
+
+---
+- name: starting & stopping the services
+  hosts: db
+  tasks:
+          - service: name=vsftpd state=started
+            when: ansible_host == "server2"
+          - service: name=nginx state=stopped
+            when: ansible_host == "server1"
+
+=====================>Loops in ansible<=========================================================================
+
+---
+- name: Installing multiple packages
+  hosts: all
+  tasks:
+    - name: Install Packages
+      apt: name={{item}} state=latest #we can not define this {{item}}
+      with_items:
+      - tree
+      - vsftpd
+
+====================> To generate the logs<=====================================================================
+
+Need to define the syntx in the following path "/etc/ansible/ansible.cfg"
+
+[defaults]
+log_path=/tmp/ansible.log
+
+===============================================================================================================
+ 
+---
+- name: Configuring Apache service
+  hosts: all
+  tasks:
+    - name: Install apache2
+      apt:
+        name: apache2
+        state: present
+     - name: Start the apache2 service
+        service:
+          name: apache2
+        state: started
+     - name: Add firewall rules
+       firewalld:
+         port: 80/tcp
+         permanent: true
+         state: enabled
+      - name: Reloading the firewall configuration for the new rule
+        systemd:
+          name: firewalld
+          state: reloaded
+      - name: Copy index file to apache directory
+        copy:
+          src: /tmp/index.html
+          dest: /var/www/html
+      - name: Restart the apache2 service
+        service:
+          name: apache2
+          state: restarted
+
+
+============================Ansible with 20===================================================================================
+
+Tags are basically define the functions at specific point
+
+Command : ansible-playbook -i hosts multihosts-nginx.yml --tags=str_gene -u ansible -vvv
+
+---
+- name: nginx install and start the service
+  hosts: all
+  become: true
+
+  tasks:
+          - name: Install nginx
+            apt:
+                    name: nginx
+                    state: latest
+            tags:
+            - insta_gene
+          - name: Start the service
+            service:
+                    name: nginx
+                    state: started
+            tags:
+            - str_gene
+
+
+==========================> Mandatory tags(always)
+
+ansible-playbook -i hosts multihosts-nginx.yml --skip-tags="insta_gene" -u ansible -vvv
+
+---
+- name: nginx install and start the service
+  hosts: all
+  become: true
+
+  tasks:
+          - name: Install nginx
+            apt:
+                    name: nginx
+                    state: latest
+            tags:
+            - insta_gene
+          - name: Start the service
+            service:
+                    name: nginx
+                    state: started
+            tags:
+            - always
+			
+==============================================Ansible Roles================================================
+
+-> Ansible roles allow us to group multiple tasks into one container to do the automation in one manner
+-> Ansible roles are consist of many playbooks, just like modules in puppet & cook books in checf
+-> Roles are set of tasks and additional files which allow us to break-up the configuration.
+-> Roles can be modified easily as per the requirements
+-> Large playbooks having a lot of tasks can be implemented easily using roles
+-> Roles also redues chances of syntax errors while writing playbooks
+
+sudo ansible-galaxy init /etc/ansible/roles/apache --offline  {For initialisation}
+
+
+
+---
+- hosts: localhost
+  tasks:
+    - name: using python to fetch server list from group
+      connection: local
+      command: python3 server_list.py {{ group_name }}
+      register: result
+
+    - debug:
+        var: result.stdout_lines
+
+- hosts: localhost
+  serial: 1
+  tasks:
+    - name: Set the state of a virtual machine to poweroff using MoID
+      vmware_guest_powerstate:
+        hostname: sfo-prd-vc01.sfo.ci.lan
+        username: ci.lan\pgk-prd
+        password: *****
+        folder: /SFO-nonPRD/vm
+        name: "{{ item }}"
+        state: powered-off
+        validate_certs: no
+      with_items: "{{ result.stdout_lines }}"
+	  
+	  
+===============================================================================================================
+	  
+---
+- hosts: localhost
+  tasks:
+    - name: using python to fetch server list from group
+      connection: local
+      command: python3 server_list.py {{ group_name }}
+      register: result
+
+    - debug:
+        var: result.stdout_lines
+
+- hosts: localhost
+  serial: 1
+  tasks:
+    - name: Set the state of a virtual machine to poweroff using MoID
+      vmware_guest_powerstate:
+        hostname: sfo-prd-vc01.sfo.ci.lan
+        username: ci.lan\pgk-prd
+        password: *****
+        folder: /SFO-nonPRD/vm
+        name: "{{ item }}"
+        state: powered-on
+        validate_certs: no
+      with_items: "{{ result.stdout_lines }}"
+	  
+===============================================================================================================

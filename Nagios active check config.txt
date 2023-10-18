@@ -1,0 +1,35 @@
+==> Hosts.cfg
+
+ define host {
+    use             generic-host
+    host_name       sfo-prd-airflow01
+    address         10.35.13.121
+    hostgroups      riq_sfo,riq_sfo_airflow
+    contact_groups  pagerduty
+}
+
+
+====> Services.cfg
+
+define service {
+    use                  riq_sfo_check_interval_5min_service
+    service_description  Airflow URL Not Loading
+    host_name            sfo-prd-airflow01
+    servicegroups        riq_sfo_airflow_url
+    check_command        check_Airflow_service
+    }
+	
+==> Commands.cfg
+
+define command {
+    command_name  check_Airflow_service
+    command_line /usr/lib/nagios/plugins/check_http -H 10.35.13.121:8080/admin -u 'http://10.35.13.121:8080/admin/' -p 8080 --expect=200 -s 'Airflow'
+    }
+	
+==> hostgroups.cfg
+
+define hostgroup {
+    hostgroup_name     riq_sfo_airflow
+}
+
+

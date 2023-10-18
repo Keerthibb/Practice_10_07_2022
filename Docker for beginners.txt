@@ -1,0 +1,45 @@
+
+-> docker
+
+-> docker ps
+
+-> docker images
+
+-> docker search ubuntu
+
+#docker-compose
+
+#docker-compose up -d{create the container with detached mode}
+
+#docker-compose stop {stop the container}
+
+#docker-compose start {start the container}
+
+#docker-compose down {delete the container}
+
+Docker hub
+
+#docker login
+
+#docker images
+
+#docker logout
+
+#docker tag myubuntu{tag_name} keerthi/myubuntu{docker id/ tag_name}
+
+#docker push keerthi{image_name}/myubuntu{tag_name}
+
+#docker pull keerthi/myubuntu:latest
+
+.^. Docker hub will compress the docker images while pushing
+
+-> To assign a tag to docker image
+
+#docker tag next_ops{existing_imagename} next_ops:v1{with a tagged version}
+
+#docker login --> To log into docker hub from CLI
+
+#docker push image_name
+
+Login to container with root previleges
+$docker -exec -u 0 -it conta iner_id /bin/bash  

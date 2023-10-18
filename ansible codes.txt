@@ -1,0 +1,33 @@
+---
+- hosts: feeds1.savingstar.com
+  remote_user: masingh
+  become: true
+  become_user: root
+  become_method: sudo
+  vars:
+  become: yes
+
+  tasks:
+  - name: create Nagios monitoring user account SRE-4743
+    user:
+         name: nagios_client
+         shell: /bin/bash
+         state: present
+         groups: savingadmin
+
+  - name: assign nagios_client SSH key
+    authorized_key:
+         user: nagios_client
+         manage_dir: yes
+         key: 
+		 
+===================================================================================================================
+
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+   - name: Add A record for newly build server
+     shell: /bin/bash 'sed -i '/^gold/ a Baking powder' /home/pgk/test.txt'
+	 
+===================================================================================================================
