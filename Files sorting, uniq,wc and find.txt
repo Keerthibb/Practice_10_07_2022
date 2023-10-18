@@ -1,0 +1,33 @@
+1894  wc apache
+ 1895  wc apache2.txt 
+ 1896  wc -l apache2.txt 
+ 1897  wc -m apache2.txt 
+ 1898  wc -w apache2.txt 
+ 1899  wc -c apache2.txt 
+ 1900  wc -L apache2.txt 
+ 1901  uniq
+ 1902  cat > rdp1
+ 1903  ls
+ 1904  uniq rdp1
+ 1905  sort rdp1 | uniq -u
+ 1906  ls
+ 1907  cat rdp
+ 1908  cat rdp1
+ 1909  uniq rdp1
+ 1910  sort rdp1 | uniq -u
+ 1911  cat -n rdp1
+ 1912  uniq -u rdp
+
+Find all files larger than or equal to 100 MB under entire file system.
+====> find / -size +100M   (/ --> dir)
+
+===> find / -type f -size +100M 
+
+===> Find all files greater than 1 GB size in root file system.
+
+===> find / -type f -size +1G
+
+
+$ sudo find /var -type f -size +100M -exec ls -lah {} \;
+
+

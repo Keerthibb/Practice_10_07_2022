@@ -1,0 +1,52 @@
+scp command 
+
+Secure copy command to copy the data from the local machine to server or b/n client and server.
+
+scp port number is : 22
+
+scp file name keerthi@192.168.43.26:/path to stores the files
+
+If ssh port is change we can use the below command
+
+scp -P 11222 "User administraton.txt" keerthi@192.168.43.26:/home/keerthi/Desktop/Test
+
+If we include the dir we will use :=> scp -P 10222 -r Linux-Learning keerthi@192.168.43.26:/home/keerthi/Desktop/master
+
+Also we can using the remote server credentials to copy the data from remote machine to local 
+
+----> scp -P 11222 keerthi@192.168.43.26:/home/keerthi/Desktop/Test/sync/* C:\Users\KeerthikumarBB\Desktop\Linux-Learning
+
+
+*************************************************************** Rsync ******************************************************************************************
+
+
+==> rsync -rvh /home/keerthi/Desktop/Test/sync/* /home/keerthi/Desktop/Test/client/
+
+-r ==> recursive dir
+-v ==> verbose to see the status
+-h ==> to read human readable format
+-a ==> Data will archive and secure
+* ==> indicates all files which is stored under the pwd
+
+
+Using Include and Exclude 
+
+==> rsync -vah --include '*.txt' --exclude '*.sh' --exclude '*.bmt' /home/keerthi/Desktop/Test/sync/ /home/keerthi/Desktop/Test/client/
+
+--> If we have to add the files use --include and , if we do not want do add the copy files use --exlude and formats
+
+If we want to sync the files from one server to another server
+
+rsync -rvh /home/keerthi/Desktop/Test/sync/* keerthi@192.168.43.26:/home/keerthi/Desktop/Test
+
+
+rsync -rvh --include '*.txt' --exclude '*.bmt' /home/keerthi/Desktop/master/ubu_cen/* keerthi@192.168.197.129:/home/keerthi/Desktop/master
+
+
+scp /home/keerthi/Desktop/master/client/* keerthi@192.168.197.129:/home/keerthi/Desktop/master/server
+
+
+
+ssh-keygen
+
+To generate public and private keys

@@ -1,0 +1,40 @@
+sudo apt update --> need to check updates
+sudo apt install net-tools  ---> to install ifconfig 
+which config  ---> need to run this cmnd
+After it will give paths---
+
+192.168.43.28--ip address
+
+sudo apt install ssh ----> To install ssh 
+
+sudo apt install finger ---> To install finger command
+
+sudo apt update or sudo apt-get update  ----> To install the updates
+
+sudo apt install vsftpd ---> To install ftp server
+After installing the above cmnd, go to browser and need to check with the ip address.
+You will get one ftp link. (ftp:// ip address)
+
+Now need to configure the ftp file using the below cmnd.
+
+1) need to check updates --> sudo apt-get update
+
+2) sudo apt install vsftpd
+
+3)sudo nano /etc/vsftpd.conf ---> after enter this cmn, go to and enable the from (anonymous_enable=NO) to (anonymous_enable=YES)
+ 
+4) sudo systemctl restart vsftpd
+
+5) sudo systemctl enable  vsftpd
+
+6) sudo systemctl status vsftpd
+
+7) cd /srv/ftp ----> this the ftp path
+
+8) Need to create a folder
+
+9) sudo systemctl restart vsftpd
+
+10) Need to check firewall status ---> sudo ufw status
+If it's inactive need to avtive the firewall using the below cmnd.
+11)sudo ufw allow ftp  ---> firwall is enable.

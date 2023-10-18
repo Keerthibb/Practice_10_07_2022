@@ -1,0 +1,25 @@
+How to Kill a Process Running on Specific Port
+
+The Linux operating system consider everything as file. So first of all, use lsof (List of Open Files) Linux command to identify the process id (PID) of running process on any port. The you can use kill command to kill that process using the PID.
+
+Kill Process on Port
+For example, you need to kill process running on port 3000.
+
+sudo kill -9 $(sudo lsof -t -i:3000)
+Explanation
+
+First “sudo lsof -t -i:3000” will return the PID of the process running on port 3000.
+
+lsof -t -i:3000
+
+6279
+
+The above result shows 6279 is the PID of the process on port 3000. Now you can use kill command to kill the process.
+
+sudo kill -9 6279
+
+The following command issued from the console determines which ports are listening for TCP connections from the network:
+
+$nmap -sT -O localhost
+
+$lsof -i | grep 834

@@ -1,0 +1,12 @@
+
+Alias is just like a shortcut keys
+
+~$ alias -p ==> Print the existed aliases
+
+$ alias 1=" cd /var/log"   ==> If i enter 1 it will go to the following path  ( cd /var/log ) 
+
+$ alias 2=" sudo cat /var/log/kern.log "
+
+To remove an alias we must type $ unalias alias_name
+
+To remove all defined aliases we must type $ unalias -a 

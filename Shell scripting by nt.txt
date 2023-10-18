@@ -1,0 +1,35 @@
+* Script means loosely or typed programms
+* Maximum interpreter based
+* Special env is not required
+
+
+.sh extentions is not compulsary it is an optional.
+
+Colection of unix commands called unix shell 
+
+Colection of linux commands called linux shell 
+
+Shell scripting : To execute lump sum commands at a time.
+
+To view the system shells
+
+cat /etc/shells
+
+
+To view the current shell
+ ==> echo $0
+
+To exit from the 1 current shell to new shell just write (exit) command
+
+bash prompt is dollor $, and bash prompt syntax is sh(standard shell)
+
+
+environment variables : echo $HOME
+
+Shell script is classified into 2 types  
+
+1)Interactive : While script is running it is asking the required input from the user or from the keyboard. (read command)
+
+2)Non-interactive : While script is running the input doesn't required from the user or from the keyboard.
+
+

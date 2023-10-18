@@ -1,0 +1,77 @@
+Port numbers
+The Well Known Ports are those from 0 through 1023.
+The Registered Ports are those from 1024 through 49151.
+The Dynamic and Private Ports are those from 49152 through 65535.
+
+------------------------------------------------------------------------------------------------
+
+cat /etc/services
+grep -w '80/tcp' /etc/services
+grep -w '443/tcp' /etc/services
+egrep -w '22/(tcp|udp)' /etc/services
+
+-------------------------------------------------------------------------------------------------
+
+Use ss command to display all open TCP and UDP ports in Linux.
+Another option is to use the netstat command to list all ports in Linux.
+Apart from ss/netstat one can use the lsof command to list open files and ports on Linux based system.
+Finally, one can use nmap command to check TCP and UDP ports too.
+
+
+-------------------------------------------------------------------------------------------------------
+
+-------> netstat -na | grep 5500
+
+-------->  netstat -nta | grep 80
+
+------>  sudo netstat -tulpn | grep LISTEN
+
+-t : All TCP ports
+-u : All UDP ports
+-l : Display listening server sockets
+-p : Show the PID and name of the program to which each socket belongs
+-n : Don’t resolve names
+| grep LISTEN : Only display open ports by applying grep command filter.
+
+keerthi@UbuntuM:~$ sudo su
+root@UbuntuM:/home/keerthi# netstat -anlp |grep 3389
+tcp6       0      0 :::3389                 :::*                    LISTEN      805/xrdp
+root@UbuntuM:/home/keerthi#  netstat -nta | grep 3389
+tcp6       0      0 :::3389                 :::*                    LISTEN
+root@UbuntuM:/home/keerthi# lsof -i -P -n | grep 3389
+xrdp       805            xrdp   11u  IPv6  27179      0t0  TCP *:3389 (LISTEN)
+
+
+-----------------------------------------------------------------------------------------------------------
+
+Use ss to list open ports
+The ss command is used to dump socket statistics. It allows showing information similar to netstat. 
+It can display more TCP and state information than other tools. The syntax is:
+
+-------->  sudo ss -tulpn
+
+-------->  ss -tunelp | grep 15672
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Listening ports and applications using lsof command
+Let us run the following to check open TCP and UDP ports using the lsof command:
+
+-------->  sudo lsof -i -P -n | grep LISTEN
+
+--------> sudo lsof -i -P |grep ssh
+
+----------------------------------------------------------------------------------------------------------------
+
+nmap command
+
+In addition, to above commands one can use the nmap command which is an open source tool for network exploration and security auditing. We are going to use nmap to find and list open ports in Linux:
+$ sudo nmap -sT -O localhost
+$ sudo nmap -sU -O 192.168.2.254 ##[ list open UDP ports ]##
+$ sudo nmap -sT -O 127.0.0.1 ##[ list open TCP ports ]##
+$ sudo nmap -sTU -O 192.168.2.24
+
+
+
+

@@ -1,0 +1,45 @@
+*********************************************Server end *************************************************************
+
+apt-get install nfs-kernel-server
+
+ mkdir /public  --For public {chmod 755 /public/}
+
+ mkdir /private --For private {chmod 777 /private/}
+
+nano /etc/exports ==> Open the export file 
+
+/public *(ro,sync,no_subtree_check)
+/private 192.168.197.129(rw,sync,no_subtree_check)
+
+* ==> Whole world can access
+
+Run the below command to export it
+
+exportfs -arvf
+
+systemctl start nfs-kernel-server
+systemctl status nfs-kernel-server
+systemctl enable nfs-kernel-server
+systemctl status nfs-kernel-server
+
+======================================= Client end ==============================================================
+
+yum install nfs-utils
+systemctl status nfs-server
+systemctl start nfs-server
+systemctl status nfs-server
+
+===> (To show the mount of server end) showmount -e 192.168.197.128
+ df -h
+ mkdir /nfs_public
+ mkdir /nfs_private
+ mount -t nfs 192.168.197.128:/public /nfs_public
+ mount -t nfs 192.168.197.128:/private /nfs_private
+ mount
+df -Th
+nano /etc/fstab  
+
+192.168.197.128:/public /nfs_public     nfs     defaults,_netdev        0       0
+192.168.197.128:/private        /nfs_private    nfs     defaults,_netdev        0       0
+
+

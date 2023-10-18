@@ -1,0 +1,55 @@
+sudo apt list --upgradable ----> To check the updates in Ubuntu
+
+sudo apt list --upgradable | grep "\-secuirty"  ---> In ubuntu
+
+sudo apt-show-versions | grep upgradeable | grep security ---> To check the security patches
+
+apt-show-versions | grep upgradeable | grep security | wc -l
+
+sudo yum updateinfo list updates security  ---> In RHEL
+
+
+yum updateinfo list updates security --exclude=kernel*
+
+
+yum updateinfo list updates security | wc -l
+
+yum updateinfo list updates security
+  
+apt list --upgradable    
+
+apt install apt-show-versions
+
+apt-show-versions | grep upgradeable | grep security
+    
+
+To check the versions
+
+dpkg --list | grep linux-image
+
+
+
+
+
+sudo apt-mark showhold
+
+sudo apt-mark hold Kernel version
+
+sudo apt-mark unhold package-name    
+
+sudo apt-mark unhold 5.4.0-1026-azure
+
+5.4.0-1065-azure
+
+sudo apt-mark hold 5.4.0-1065-azure
+
+We have updated the grub file by using below parameters in configuration file /etc/default/grub
+
+GRUB_DEFAULT="1>2"
+
+sudo update-grub
+
+
+
+
+

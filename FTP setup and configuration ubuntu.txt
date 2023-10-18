@@ -1,0 +1,49 @@
+FTP on Ubuntu 18.04 server, and a non-root user with sudo privileges
+
+Step 1 — Installing vsftpd
+
+1.	apt update
+2.	apt install vsftpd
+
+When the installation is complete, let’s copy the configuration file so we can start with a blank configuration, saving the original as a backup
+
+3.	cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+
+We will create a dedicated FTP user
+
+4.	adduser <username>
+Password: <password>
+Retype password: <password>
+5.	mkdir /home/<username>/ftp
+6.	chown nobody:nogroup /home/<username>/ftp
+7. 	chmod a-w /home/<username>/ftp
+8.	ls -la /home/<username>/ftp
+
+Next, let’s create the directory for file uploads and assign ownership to the user
+
+9.	mkdir /home/<username>/ftp/files
+10.	chown <username>:<username> /home/<username>/ftp/files
+11.	ls -la /home/<username>/ftp
+
+Step 2 — Configuring FTP Access
+
+12.	vi /etc/vsftpd.conf
+Uncomment this to allow local users to log in.
+local_enable=YES
+write_enable=YES
+chroot_local_user=YES
+Add these settings anywhere in the file:
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+
+Finally, let’s add our user to /etc/vsftpd.userlist. Use the -a flag to append to the file
+
+echo "<username>" | sudo tee -a /etc/vsftpd.userlist
+cat /etc/vsftpd.userlist
+systemctl restart vsftpd
+
+Testing FTP Access:
+ftp -p 104.211.219.75

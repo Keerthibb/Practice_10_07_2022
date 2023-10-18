@@ -1,0 +1,62 @@
+How To Halt/Stop a User Called vivek on Linux
+Open a command-line terminal (select Applications > Accessories > Terminal), and then type the following commands.
+ First, switch to the root user by typing the su - and entering the root password, when prompted (you can also use the sudo command if configured on your machine). 
+Type the skill command as follows:
+
+# skill -STOP -u vivek
+
+The skill command sends a terminate command (or another specified signal) to a specified set of processes.
+
+Resume Halted User Called vivek in Liuux
+Send CONT single to user vivek, type the following command:
+# skill -CONT -u vivek
+
+Kill and Logout a User Called vivek under Linux
+You can send KILL single, type the following command:
+# skill -KILL -u vivek
+
+ex :  ~$ w
+ 19:13:21 up 24 min,  3 users,  load average: 0.00, 0.01, 0.06
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+keerthi  pts/0    192.168.197.1    18:53    0.00s  0.24s  0.00s w
+rnoc     pts/1    192.168.197.1    19:13    1.00s  0.00s  0.00s -sh
+dbteam   pts/2    192.168.197.1    19:05    4:15   0.05s  0.05s -bash
+keerthi@Ubuntu-VM:~$ sudo skill -KILL -u dbteam
+keerthi@Ubuntu-VM:~$ w
+ 19:13:43 up 25 min,  2 users,  load average: 0.44, 0.10, 0.09
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+keerthi  pts/0    192.168.197.1    18:53    6.00s  0.25s  0.00s w
+rnoc     pts/1    192.168.197.1    19:13   23.00s  0.00s  0.00s -sh
+
+
+Kill and Logout All Users
+
+The ultimate command to kill and logout all users is as follows:
+# skill -KILL -v /dev/pts/*
+
+
+The pkill command
+To halt or stop a user called vivek, enter:
+# pkill -STOP -u vivek
+
+Say you want to resume a user called vivek who was halted previously by the pkill command, enter:
+# pkill -CONT -u vivek
+
+Finally kill all php-cgi process owned by vivek user, enter:
+# pkill -KILL -u vivek php-cgi
+
+How to kill a Linux login session remotely
+We can kill a Linux login session remotely by sending a hangup signal (SIGHUP) to the process running the login session. 
+Typically BASH or KSH shell runs the login session. First, find out your current tty as we need to avoid killing ourselves. 
+Type the tty command and press the [Enter] key:
+# tty
+
+Say you want to see all of the running processes of a user named wendy, enter:
+# ps -fu {userNameHere}
+# ps -fu wendy
+
+
+
+What is difference between halt and shutdown?
+1 Answer. halt brings the system down to its lowest state, but leaves it powered on. 
+shutdown brings the system down to its lowest state, and will turn off power (soft power switch) if it can

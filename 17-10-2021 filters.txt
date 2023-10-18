@@ -1,0 +1,21 @@
+nl (number lines of file) command :==> To add the numbers in the prefix
+
+
+To cutting the character
+cut command ==> cut -f 3 bha1.txt ===> 3 indicates column of the file (if we want to view more columns, need to be enter the column names ex:  cut -f 2,3 bha1.txt)
+
+To view the ranges b/n colums, we want to give ranges { ex: cut -f 1-3 bha1.txt}
+
+To view thw rows and rows range
+
+cut -c1,6 bha2.txt and cut -c1-6 bha2.txt
+
+
+Paste command ==> just merging of files.
+
+$ paste -s black bha2.txt   (if we don't give -s , the files will mix up)
+
+Sort command
+
+sort -oresult black white (sort the 2 files and the given output will save in result file)
+

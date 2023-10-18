@@ -1,0 +1,131 @@
+Jenkin
+
+admin
+c04b1b139b024b408426cd8a10b8108e
+
+kbb
+
+-> Jenkins
+Set of tasks/activities that will perform a particular tasks
+
+SCM -> Source code Management
+
+Email-notification -> It is just one time set up
+
+-> Need to disable 2 Factor authentication
+-> Need to allow less secure on
+
+
+To set a specific variables
+https://wiki.jenkins.io/display/JENKINS/Building+a+software+project#Buildingasoftwareproject-belowJenkinsSetEnvironmentVariables
+
+Install the plugins in the managed plugins
+Download the package(.hpi) and upload it to upload plugin option 
+
+.^. Even if you install the plugin but it is not working which means you have to enable the plugin in the installed option.
+
+How To Reset Jenkins Admin Password
+
+root@KBB-LT:/var/lib/jenkins# pwd
+/var/lib/jenkins
+root@KBB-LT:/var/lib/jenkins# cat -n config.xml | grep useSecurity
+    10    <useSecurity>true</useSecurity>
+root@KBB-LT:/var/lib/jenkins#
+
+
+--> Make it false from true and restart the jenkin service
+--> The login page will not ask you anything
+
+How To Install Jenkins Using Docker Container
+
+$ docker run -p 8090:8080 -p 50000:50000 -v C:\jenkins_home:/var/jenkins_home jenkins/jenkins:lts-jdk11
+
+Please use the following password to proceed to installation:
+
+ab1796da441e4f8d8139f8a7ce34bd9b
+
+This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+
+To restart the jenkins from browser
+
+http://192.168.56.1:8080/restart
+
+
+############################### Upstream and Downstream Jobs #######################################
+
+Paremerterized plugin
+Build pipeline
+
+Running the Jenkins job one after one
+-> Relationship b/n the jobs
+Build, Test, Deployment, Regression
+
+# Adavantages of Parameter
+You don't have to hardcode anything, suppose if you want run any job you can just change or add the parameter
+
+We can re-arrange the parameters
+
+Linux:- $(PARAMETER_NAME)
+Windows:- %PARAMETER_NAME%
+
+
+===========================> Jenkins Pipeline
+
+Simple words - Series or collection of Job or events which are linked with each other in sequence
+which will help to build CI and CD.
+
+Technical words - Jenkins Pipeline is a suite of plugins that supports implementing and integrating
+continuous delivery pipelines into jenkins.
+
+Pipeline provides an extensible set of tools for building simple-to-complex delivery pipelines "as code"
+with the help of the pipeline.
+
+https://www.jenkins.io/doc/book/pipeline/jenkinsfile/ {Handling failure}
+
+What is Jenkins Pipeline
+
+What is Jenkins file
+
+The definition of a Jenkins Pipeline is written into a text file(called a Jenkinsfile)
+
+Advantages of the pipeline, if one of the stage is failed it will not go to next phase
+
+We can write the jenkins file in a two way
+
+1. Declarative way
+2. Scripted way
+
+#######################################>  Master and Slave
+
+-> What is the problem statement with current approach
+
+-> What is Jenkins Master and Slave architecture
+
+-> Setup slave(Windows) without tool
+
+-> Setup slave(windows) with tools(Java, Maven, Git)
+
+
+Problem statement
+
+It is not recommended to run all Jenkins job in master
+
+===================================> Job schedule through crontab, polling
+
+=> Automatically Trigger Jenkins Jobs Using Github WebHook | Jenkins Integration With Github Webhook
+
+=> How To Run Jenkins Job Periodically | Run Jenkins Job Every 5 Minutes |2 hours | Poll SCM In Jenkins
+
+-> Cron patterns
+
+Based on the job schedule it will keep on checking and updating the job
+
+-> Polling
+Based on the poll it will if there is anything changes have been done on the github
+
+
+
+
+
+
+

@@ -1,0 +1,67 @@
+=> Kubernetes
+
+Container : It is a light weight application
+Using system resources we can install container engine and run a container
+
+VM : It is a heavy weight
+Have to allocate resources(like CPU,Memory,Disk)
+
+App + Dependcies = Container{It will run on the container engine}
+
+    App
+     |
+Dependencies
+     |
+ Container
+     |
+Container engine
+     |
+Operating system
+     |
+  Kernel
+
+Every container will host on "Docker"
+
+Docker 
+--> Community edition[Open source]
+
+--> Enterprise edition
+
+Kubernates is also called "K8S"{Greek work}
+
+Containers will be managed by Kubernates
+
+Container is a open source platform for managing containerised work loads and services.
+
+Kubernates is used for orchestration of containers
+
+
+K8S Architecture
+
+Cluster
+   |   
+ Pods{No of containers called Pods} [Autoscaling]
+   |
+Containers
+   |
+Application [Using services we can manage the applications]
+   |
+Services
+
+Master & Worked nodes
+
+                                                                     Kubectl
+                                                                        |
+                 ______________________________________________________+_____________________________________________________
+                 |                                                                                                           |
+             => Master                                                                                                   => Worker
+# API server                                                                           #Container engine{It makes possible to run all the containers}
+# etcd{It is a backend database and it will store the key value pairs}                 #Kublet 
+# scheduler{Pods schdeuling scaleup/scaledown}                                         #Proxy    
+# Controller manager {It will manage the kublet commands in all the worker nodes}
+
+
+**Kubernates alternate is Docker swarm**
+Azure Container services
+Amazon EKS
+Google GKE

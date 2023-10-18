@@ -1,0 +1,85 @@
+
+**** IMPT ****  How to archvie files and directories using tar
+
+===> tar options destination source
+
+# tar -cvzf /arch_backup/arch/arcgive.tar.gz /lvs/test/
+
+To exclude
+
+tar -cvzf backup.tar.gz --exclude *.gz *
+
+Compress and updating
+
+$ touch testing{1..10}.txt
+
+$ tar -cvf archive.tar *.txt  ----> To compressing all the test file into a archive file
+
+$ tar -uvf archive.tar *.txt  ----> To updating the files into archive 
+
+$ tar -tf archive.tar (tar -tf archive.tar | ls -l) ----> To list the files in the archive
+
+$ tar -xvf archive.tar  -----> To extract the archive file
+
+$  du -sh *.txt  ----> to check the disk usage of the text files
+
+We cann't update the tar.gz files but we can update the .tar files
+
+$ tar -uvf compressed.tar.gz *.txt
+tar: Cannot update compressed archives
+tar: Error is not recoverable: exiting now
+
+$ tar -uvf compressed.tar *.txt
+
+
+***************************************bzip2 file ******************************************************************************************
+
+To compress the file ----> bzip2 -z filename
+
+To extract the file ------> bzip2 -d filename.bz2
+
+To keeping the original file and do compressing ---> bzip2 -k filename
+
+**************************************gzip and gzip -k **********************************************************************************
+
+To compressing the original file -------> gzip autlogs(file name)
+
+To keeping the original file and do compressing  ------> gzip -k putfile
+
+********************************************************ZIP and UNZIP *******************************************************************
+
+To Zip the file ------>  zip -r putfile.zip putfile
+
+To Unzip the file ---->   unzip putfile.zip
+
+To zip the all .txt files into one zip file ---> zip test.zip *.txt   ( test.zip --> filename.zip)
+
+To Exculde the file while doing zip ( the archi.tar.gz file will not add into the zip)
+
+------->  zip -9 -r test1.zip /home/keerthi/Desktop/Test/s-gfacl/ -x /home/keerthi/Desktop/Test/s-gfacl/archi.tar.gz
+
+To delete the particular file in the zip format
+
+------->  zip -d test.zip black5.txt 
+
+( test.zip --> filename.zip , black5.txt ---> file name)
+
+To update the new files into existed zip ---->  zip -fr test.zip *
+
+To view the list files in the .zip archive without being extracting ----> zipinfo test1.zip
+
+----> zmore white.zip , zless white.zip and zcat white.zip =====> Show the contents of the files
+
+***************************************************************************************************************************************
+
+To extract the tar.gz file
+
+----> tar -xf filename.tar.gz
+
+To view the contents the file in tar.gz
+
+----->  tar -tvf opt.txt.tar.gz
+
+To read the tar.gz files using zcat command
+
+-----> zcat opt.txt.tar.gz

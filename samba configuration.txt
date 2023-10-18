@@ -1,0 +1,46 @@
+To uninstall the package   ----> sudo apt-get purge samba
+
+To install the package ---->   sudo apt install samba
+
+Open the file in the below path and add the below comments in last 
+
+ systemctl status smbd
+ systemctl enable smbd
+ systemctl enable nmbd
+ systemctl restart smbd
+ systemctl status smbd
+
+==> mkdir /etc/samba/deluxe
+
+==> chown u-sam:root deluxe/
+
+----> sudo nano /etc/samba/smb.conf
+
+[Directory]
+ comment = sambashare
+ path    = /sambashare
+ browseable = yes
+ read only = no
+ guest ok = yes
+
+([share]
+        comment = samba
+        path = /etc/samba/deluxe
+        browseable = yes
+        valid users = u-sam
+        writeable = yes
+)
+
+----> sudo mkdir /sambashare
+
+----> sudo useradd user1
+
+----> sudo smbpasswd -a user1
+
+----> sudo ufw allow samba
+
+----> sudo systemctl start smbd
+
+----> sudo chmod 777 sambashare/
+
+Browse the ip address in file explore (\\192.168.43.26)

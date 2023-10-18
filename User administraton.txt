@@ -1,0 +1,208 @@
+=====> Superuser - Administrator - root (The root user id is 0)
+
+=====> Normalusers :- The normalusers which are created by Administrator and the userid(UID) starts from 1000 - 650000
+
+=====> System users : Whenever we the install services or some packages along with that there are associated users to maintain those services 
+(ex: vsftpd service and the user is frpuser and NFS service .'. these users id starts with 1-999)
+
+Once we create the user the following default is also will be create (- Home -Login shell -Group .bashrc .bash_profile .bash_logout)
+And entry is also will be created in /etc/passwd and /etc/shadow, /etc/gshadow.
+/etc/skell dir these files will be copied if we create home dir. (-m)
+
+ex : keerthi@Ubuntu-K:~$ grep anu /etc/passwd
+anu:x:1027:1027::/home/anu:/bin/sh
+keerthi@Ubuntu-K:~$ grep acuser2 /etc/passwd
+acuser2:x:1011:1019:,,,:/home/acuser2:/bin/bash
+
+We can set the own uid and gid for the users
+
+===> sudo useradd -u 1020 -g 1023 clg-3
+
+************************************************************************************************************************************************************************
+cat /etc/default/useradd
+
+cat /etc/login.defs
+
+
+*********************************************************************************Password Policy *************************************************************************
+
+usermod ---> Modify the user accounts.
+
+To change the username or login name
+
+====> sudo usermod -l redhat kali
+
+redhat ---> New login name, kali is the old login name
+
+groupmod ---> modify the group name
+
+To change the groupname
+
+====> groupmod -n techark tech  (tech is the old name)  (gid will not change)
+
+==========================================================================================================================================================================
+
+To add the user to multiple groups
+
+=====>  sudo usermod -aG noc,accounts-team,development-team appu   (grep appu /etc/group)
+
+-aG ---> Appeding the group
+sudo usermod -aG noc,accounts-team,development-team ----> Groups name
+appu ----> user name
+
+To findout the user whether the user is added to the grop or not.
+keerthi@Ubuntu-K:~$ id appu
+uid=1001(appu) gid=1001(appu) groups=1001(appu),1011(accounts-team),1013(development-team),1014(noc)
+
+============================================================================================================================================================================
+To change the primary group details
+
+usermod -g newname oldname
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To put the login shell to nologin shell
+
+=====> sudo usermod -s /sbin/nologin appu
+
+keerthi@Ubuntu-K:~$ grep appu /etc/passwd
+appu:x:1001:1001:,,,:/home/appu:/sbin/nologin
+
+To bring back to login shell
+
+====> sudo usermod -s /bin/bash appu
+
+keerthi@Ubuntu-K:~$ grep appu /etc/passwd
+appu:x:1001:1001:,,,:/home/appu:/bin/bash
+
+To check the shell available
+keerthi@Ubuntu-K:~$ cat /etc/shells
+# /etc/shells: valid login shells
+/bin/sh
+/bin/bash
+/usr/bin/bash
+/bin/rbash
+/usr/bin/rbash
+/bin/dash
+/usr/bin/dash
+
+**********************************************************************************************************************************************************************************
+
+To lock the unwanted login immediately
+
+===> sudo usermod -L appu
+appi:!$6$kHwaS7qmy0gc.tMK$mkg1h2mN27IgStKMcoln3zMh.Wcd81kAjO88JDnemGDIb/ywf8X7hieP5a11kXVPoPWKuzztEN4ITpr2jqzce.:18750:0:99999:7:::
+keerthi@Ubuntu-K:~$ sudo grep app /etc/gshadow
+appu:!::
+blackstone:!::keerthi,appi
+development-team:!::admuser1,admuser2,appu
+noc:!::appu
+accounts-team:x::acuser,acuser2,appu
+
+! ---> Indicates that account is locked before password
+
+keerthi@Ubuntu-K:~$ sudo passwd -S appu
+appu L 04/26/2021 0 99999 7 -1  (L indicates that locked).
+
+To unlock the user name
+
+=====> sudo usermod -U appu
+
+=====> sudo grep appu /etc/shadow
+appu:$6$zODlND.G49Ymz8sa$2CGQwhSk8FUplFHDWicWSG0FcEEdkGyyl17J.xXtueu9QQI//6vzSqr9JqlixKsndiL/jHmfPaVtAE0BlbRvk.:18743:0:99999:7:::
+
+
+*******************************************************************************************************************************************************************************
+
+To inactive the user completely
+
+====> sudo usermod -f username
+
+******************************************************************************************************************************************************************************
+If you want set some expiry date for user.(internship for some certain days)
+
+====> sudo usermod -e 2021-05-15 tech
+To set the expiry date. (tech is the username)
+
+keerthi@Ubuntu-K:~$ sudo usermod -e 2021-05-15 tech
+keerthi@Ubuntu-K:~$ sudo grep tech /etc/shadow
+tech:$6$ZvwjihPNztENFGjb$/fFQjpUHFNXbvTh3OujNPFc5EL5IjDlYQLb/EiZsBTW0klcmdTm76Uvg9aoJe6SJ7NpyKRDC6qHc0ORsFGGAy/:18762:0:99999:7::18762:
+
+keerthi@Ubuntu-K:~$ sudo chage -l tech
+Last password change                                    : May 15, 2021
+Password expires                                        : never
+Password inactive                                       : never
+Account expires                                         : May 15, 2021
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 99999
+Number of days of warning before password expires       : 7
+
+Whenever we create the user we can set the expiry date aswell
+
+====>sudo useradd -me 2021-06-28 user
+
+*****************************************************************************************************************************************************************************
+
+To add the comments to the user
+
+keerthi@Ubuntu-K:~$ sudo usermod -c "Today this password will expiry" tech
+keerthi@Ubuntu-K:~$ grep tech /etc/passwd
+tech:x:1014:1022:Today this password will expiry:/home/tech:/bin/bash
+
+To remove the comments from the user
+
+keerthi@Ubuntu-K:~$ sudo usermod -c "" tech
+keerthi@Ubuntu-K:~$ grep tech /etc/passwd
+tech:x:1014:1022::/home/tech:/bin/bash
+
+************************************************************************************************************************************************************************************
+
+
+keerthi@Ubuntu-K:~$ sudo chage -m 0 -M 2 -W 3 -E 2021-05-20 tech
+keerthi@Ubuntu-K:~$ sudo chage -l tech
+Last password change                                    : May 15, 2021
+Password expires                                        : May 17, 2021
+Password inactive                                       : never
+Account expires                                         : May 20, 2021
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 2
+Number of days of warning before password expires       : 3
+
+-m 0 ---> Minimum number of days between password change          : 0
+
+-M 2 ---> Maximum number of days between password change          : 2
+
+-W 3 ---> Number of days of warning before password expires       : 3
+
+-E 2021-05-20 ---> Account expires                                : May 20, 2021
+
+keerthi@Ubuntu-K:~$ sudo chage -m 0 -M 1 -W 2 -E 2021-05-17 tech
+keerthi@Ubuntu-K:~$ sudo chage -l tech
+Last password change                                    : May 15, 2021
+Password expires                                        : May 16, 2021
+Password inactive                                       : never
+Account expires                                         : May 17, 2021
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 1
+Number of days of warning before password expires       : 2
+keerthi@Ubuntu-K:~$ su - tech
+Password:
+Warning: your password will expire in 1 day
+
+**********************************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+

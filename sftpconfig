@@ -1,0 +1,23 @@
+udo systemctl restart ssh
+  562  sudo addgroup sftp
+  563  cat /etc/gshadow | sftp
+  564  cat /etc/gshadow | grep sftp
+  565  sudo cat /etc/gshadow | grep sftp
+  566  sudo useradd -m sftpadmin -g sftp
+  567  sudo useradd -m sftpuser -g sftp
+  568  sudo useradd -m adminsftp -g sftp
+  569  useradd -m sftpadmin
+  570  sudo useradd -m sftpadmin
+  571  sudo useradd -m adminsftp
+  572  sudo useradd -m sftproot
+  573  sudo useradd -m sftpuser -g sftp
+  574  sudo useradd -m sftpuser 
+  575  sudo passwd sftpuser 
+  576  sudo adduser sftpuser sftp
+  577  sudo groupadd sftp
+  578  sudo adduser sftpuser sftp
+  579  cat /etc/gshadow | grep sftp
+  580  sudo cat /etc/gshadow | grep sftp
+  581  sudo passwd sftpuser
+  582  sudo cat /etc/gshadow | grep sftp
+  583  sudo chmod 700 /home/sftpuser/

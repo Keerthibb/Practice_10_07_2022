@@ -1,0 +1,14 @@
+In the client end ==>  ssh-keygen -t rsa -b 4096
+
+~$ ls -l .ssh/
+total 12
+-rw------- 1 keerthi keerthi 3381 Sep 21 18:36 id_rsa
+-rw-r--r-- 1 keerthi keerthi  743 Sep 21 18:36 id_rsa.pub
+-rw-r--r-- 1 keerthi keerthi  444 Sep  5 19:05 known_hosts
+keerthi@Ubuntu-VM:~$
+
+In the server end ===>  sudo yum install openssh-server
+
+$ssh-keygen
+
+$ ssh-copy-id our_username@other_machine

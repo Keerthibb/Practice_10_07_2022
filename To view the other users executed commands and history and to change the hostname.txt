@@ -1,0 +1,11 @@
+To view the other users executed commands and history using the below command
+
+---> cat /home/username/.bash_history
+
+
+
+To change the hostname
+
+$ sudo nano /etc/hosts 
+
+$ sudo nano /etc/hostname

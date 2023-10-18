@@ -1,0 +1,60 @@
+   Method       | Alphabetic | Numerical value | Symbloc value
+
+Standard Input    stdin             0              <
+
+Standard output   stdout            1              >
+
+Standard Error    stderr            2              2> 
+
+
+If i would like to store the outputs over a executing cmnds ( To redirect the output and saving the data into a file)
+
+keerthi@Ubuntu-K:~$ date
+Friday 28 May 2021 08:31:08 PM IST
+keerthi@Ubuntu-K:~$ date > timestamp
+keerthi@Ubuntu-K:~$ cat timestamp
+Friday 28 May 2021 08:31:29 PM IST
+
+To appending the file again and again
+keerthi@Ubuntu-K:~$ date >> timestamp
+keerthi@Ubuntu-K:~$ cat timestamp
+Friday 28 May 2021 08:38:30 PM IST
+Friday 28 May 2021 08:44:14 PM IST
+Friday 28 May 2021 08:44:16 PM IST
+Friday 28 May 2021 08:44:17 PM IST
+Friday 28 May 2021 08:44:18 PM IST
+keerthi@Ubuntu-K:~$
+
+****************************************************************** To storing the kernellogs into a file ******************************************************************
+
+------->  tail -20 kern.log > /tmp/krlogs
+
+****************************************************************** To storing the output also error into files ******************************************************************
+
+keerthi@Ubuntu-K:~$ cat /var/log/kern.log > /tmp/output 2> /tmp/errors
+keerthi@Ubuntu-K:~$ cat /tmp/output
+keerthi@Ubuntu-K:~$ cat /tmp/errors
+cat: /var/log/kern.log: Permission denied
+
+****************************************************************
+
+keerthi@Ubuntu-K:~$ cat /var/log/kern.log.1 > /tmp/output 2>&1
+keerthi@Ubuntu-K:~$ cat /tmp/output
+cat: /var/log/kern.log.1: Permission denied
+keerthi@Ubuntu-K:~$ cat /var/log/kern.log.1 >> /tmp/output 2>&1
+keerthi@Ubuntu-K:~$ cat /tmp/output
+cat: /var/log/kern.log.1: Permission denied
+cat: /var/log/kern.log.1: Permission denied
+
+***********************************************************************************
+
+ cat > 123 --> Adding the input
+
+ cat < 123 ---> To view the output
+
+cat < 123 > 1234  ---> It behaves like a copy ( reading the data from 123 and appending to 1234 )
+
+One command output redirecting to other file )
+
+cat 123 | wc -l > line  --> word count output will add into line file
+

@@ -1,0 +1,55 @@
+Listing & Manging process 
+
+---> Running state :- The process is either running or its ready to run.
+
+---> Waiting state :- The process is waiting for an event or for a resource (resource :"CPU or Memory)
+                      (It's not running still it is in queue).
+
+                                  __ 1) Interuptable process :- Interuptable process can be interuptted by signal 
+                 Waiting state --|              
+                                 |__ 2) Uninteruptable process :- Uninteruptted waiting process are waiting directly on hardware condition and cannot be interuptted under any circumstances.
+
+
+---> Stopped state :- The process has been stopped, usually receiveing a stop signal.
+
+---> Orphaned state :- If a process exists with children still running, those are are orphans (doesn't harm )
+
+---> Zombie process :- This is halted process which, for some resaon, still has a task_struct data structure in the task vector.
+                       (Ex : The process has been died but it is not exist from the process table and it will not run other process also)
+                       There is no command to kill the zombie process.
+                       Also we can't kill those zombie process so inorder to fix this, server should be reboot and to clear the zombie process. 
+                       Zombie process are very dangerous, when we allocate the resource :"CPU or Memory".
+                       Whenever the big processes which is continuosly running on our machine suddenly struck with up our whatever the Memory or CPU utilisation allocated to that process,
+                       the major CPU or Memory threats it holds and doesn't give you the other resources to run smoothly. it leads performance issues.
+
+To check the zombie process
+
+keerthi@Ubuntu-K:~$ ps -aux | grep Z  or ps -aux | egrep "Z|defunct" also we can check using top command.
+
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+keerthi    11058  0.0  0.1   9672  2232 ?        S    21:17   0:00 sadc 1 61 -Z -S A_NULL A_MEMORY
+keerthi    11100  0.0  0.0   8908   724 pts/0    S+   21:17   0:00 grep --color=auto Z
+
+{Any process stat Z which means that zombie or died process} for ex : STAT S and S+
+
+Using the above command, We have to check the first process id of the zombie , later we need to check the zombie parent process using the first zombie id.
+
+--->  ps -o ppid= -p 5592 or ps -o ppid= 5592 {5592 is the child process id}.
+
+---> Kill -9 zombie parent process id.
+
+To sort out the process of high utilization for CPU and Memory.
+
+ps -aux --sort=-pcpu,+pmem
+
+ ps -e -o pid,uname,pcpu,pmem,comm
+
+******************************************************************************************************************************************************************
+
+To bring back to foreground {fg command}
+
+jobs or jobs -l
+
+fg %3  [3 is the background process number not id.
+
+

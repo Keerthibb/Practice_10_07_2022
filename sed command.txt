@@ -1,0 +1,110 @@
+sed -n '/Hi/p' sed.txt
+
+sed -n '/s.n/p' sed.txt  --> {son and sun}
+
+sed -i '1a -------------' filename.txt  -->It will entry the first line
+
+sed -i '$a -------------' filename.txt --> It will entry the end line
+
+sed -i '/serach-string/i information entry' filename || sed -i '/amy/i 0 on-call' sed.txt {Before entry add} 
+
+sed -i '/serach-string/a information entry' filename || sed -i '/amy/a 0 on-call' sed.txt {after entry add}
+
+sed -i '3d' sed.txt --> 3rd line delete
+
+sed -i '/imperva/d' sed.txt --> search imperva and delete
+
+*************Sed command with regex******************
+
+\ --> Escape character
+
+sed -n '/put/p' sed1.txt  {Containing the word put in the sentences}
+
+sed -n '/s[.]n/p' sed1.txt
+sed -n '/s[uo]n/p' sed1.txt
+
+=========================================== The special characters in regex are: \s \t. * \+ \? and \ =================================================
+
+# \s --> Matches for space b/n words
+
+sed -n '/\s/p' sed1.txt
+
+ sed -n '/\\s/p' sed1.txt --> It will print the \s in side \s
+
+# \t --> Matches only for tab space
+
+sed -n '/\t/p' sed1.txt
+
+# . --> Matches any character, excluding new line
+
+sed -n '/g.n/p' sed1.txt  || sed -n '/\sg.n/p' sed1.txt || sed -n '/\sg.n\s/p' sed1.txt
+
+sed -n '/\./p' sed1.txt --> Matching dot with dot 
+
+# * --> matches a sequence of zero or more instances of matches for the preceding regular expression.
+
+This* --> Thi This Thiss Thisss Thissss
+
+sed -n '/Hi*/p' sed1.txt
+
+# \+ --> As *,but matches one or more
+
+sed -n '/Hi\+/p' sed1.txt --> Minimum one time or more time
+
+# \? --> As *, but only matches zero or one.
+
+sed -n '/Hi\?/p' sed1.txt
+
+================================================sed command regex with ^ and $ ====================================================================
+
+^ --> Searching the data at first
+
+sed -n '/^Mysore./p' sed1.txt || sed -n '/^Mysore/p' sed1.txt
+
+$ --> Searching the data at last
+
+sed -n '/Karantaka$/p' sed1.txt
+
+^$ --> Searching the only empty lines
+
+sed -n '/^$/p' sed1.txt
+
+sed '/^$/d' sed1.txt --> To delete the empty lines temproraily
+
+sed -i '/^$/d' sed1.txt --> To delete the empty lines permanantly
+
+sed -n '/\^/p' sed1.txt -->It will print only ^ character
+
+sed -n '/\$/p' sed1.txt
+
+=============================================== sed command regex with [] {} and () ==============================================================
+
+# [] --> Matches any single character in list 
+
+sed -n '/s[uo]n/p' sed1.txt  || sun and son
+
+sed -n '/H[a-n]i/p' sed1.txt  --> It is printing the range b/n a and n
+
+sed -n '/p[a-ci-lx-z]t/p' sed1.txt --> It is printing the range a-c,i-l,x-z in the file
+
+# {} --> Matches for required number of repeatations
+
+   ==> \{i\}
+
+sed -n '/This\{3\}/p' sed1.txt || sed -n '/This\{3,\}\b/p' sed1.txt -->  It is printing 3 sss or more than that
+
+sed -n '/This\{3\}\b/p' sed1.txt -->  It is printing only 3sss
+
+sed -n '/This\{3,4\}\b/p' sed1.txt --> It will print 3 or 4 ssss only.
+
+
+# () --> This will search for zero or more whole sequence.
+
+sed -n '/\(Key\)\{2\}/p' sed1.txt --> Print the words KeyKey 2 times only
+
+sed -n '/\(Key\)\{3\}\b/p' sed1.txt --> Print the words KeyKeyKey 3 times only
+
+
+
+
+

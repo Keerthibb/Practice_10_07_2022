@@ -1,0 +1,7 @@
+psql -V
+
+yum install @postgresql:12
+
+yum remove @postgresql:12
+
+yum install postgresql

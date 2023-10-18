@@ -1,0 +1,38 @@
+https://kb.fortinet.com/kb/documentLink.do?externalID=FD36043
+
+1) Double click the PuTTY icon to launch the application
+
+Now let's Start how to create a log file of your session
+
+2) Click Logging
+
+The logging settings are listed here on the right. Let's demonstrate how to save a log file to your desktop
+
+3) Click All session output
+
+4) Leave Putty.log as the log file name
+
+5) Then click Browse to choose the save location
+
+6) Ensure Desktop is selected  or Choose Specific Location to save file...
+
+7) Then click Save
+
+8) Ensure 'Ask the user every time' is selected... then click Open to begin your session
+
+9) Type your username, then push <Enter>
+
+10) Type your password, then push <Enter>
+
+Now let's type a simple shell command. PuTTY can log dozens of commands within your session.
+
+11) Type a simple test command here, then press <Enter>
+
+12) Now type Exit, then push <Enter> to close PuTTY
+
+We can see that a log file has been saved to the desktop or specified location.
+
+13) Now let's open the log file... double click on file saved in specific location  <File Name>
+
+The log file contains all commands entered, great for saving your sessions to review at a later date or attach the saved file in FortiCare Support ticket for TAC review.
+

@@ -1,0 +1,342 @@
+To change the ownership in one command ---> sudo chown username:groupname file or dir name.
+
+To change the group name :---> chgrp root l.txt (root is the group name and 1.txt is the file name)
+
+Giving a alphabatical permission :====> chmod ugo+rwx l.txt  {full permission}
+
+To set the policy when the user login on the first time : sudo chage -d 0 username
+
+To create the group   ==> In RHEL or centos to create the user # useradd -g ‘groupname’ ‘username’
+
+-----> sudo groupadd pogo (or) sudo addgroup cn
+
+To delete the group
+
+-----> sudo groupdel pogo
+
+To add the user into the group  (kali is the username)
+
+-----> sudo adduser kali pogo
+
+----->  In Redhat  
+
+usermod -a -G colgate appi
+You have new mail in /var/spool/mail/keerthi
+[root@localhost keerthi]# id appi
+uid=1001(appi) gid=1001(appi) groups=1001(appi),1005(colgate)
+
+To remove the user from the group ( Do not run the userdel command when removing the user from the group)
+
+-----> sudo deluser kali pogo
+
+*****************************************************To adding the group into the sudo ers file **********************************************************************
+
+#Adding groups and make it as a admin privilege specification
+
+%admin_team     ALL=(ALL:ALL) ALL
+
+*********************************************************************************************************************************************************************** 
+
+sudo -i  -----> When you run the command the path will also change
+
+sudo su  -----> When you run the command the path will be same
+
+
+
+To modify the secondary group
+
+Before the chage :  id user5
+uid=1028(user5) gid=1028(user5) groups=1028(user5)
+
+----> sudo usermod -G finusers user5    
+
+finusers ---> Group name
+-G ---> To modify the secondary group
+
+id user5
+uid=1028(user5) gid=1028(user5) groups=1028(user5),1023(finusers)
+
+
+***************************************************************************************************************************************************************************
+
+To protect the group using password
+
+groupmod -ptest HR [HR is the group]
+
+************************************************************************* File permisson (setfacl and getfacl) ************************************************************
+
+keerthi@Ubuntu-K:~/Desktop/Test$ getfacl nat/
+# file: nat/
+# owner: keerthi
+# group: keerthi
+user::rwx
+group::rwx
+other::r-x
+
+***************************** To set a permission to specific user or group or other to the file ************************************************************************
+
+setfacl command is used to set a permission
+
+setfacl -m ugo:username:rwx(access ) file or dir name 
+
+--> u :- if you want to add user
+--> g :- if you want to add group
+--> o :- if you want to add other
+
+****************************** To remove the permission ****************************************************************************************************************
+
+----> To remove the user from the permission of the filename or dir.
+
+#######  ----> setfacl -b user:acuser ac-team/   ( -b, --remove-all {Remove all extended ACL entries. The base ACL entries of the owner, group and others are retained})
+
+----> setfacl -b /ppk/  (All permissions will remove)
+
+---> setfacl -m ugo:username:---(access ) file or dir name
+
+----> setfacl -Rm u:classic:r-x /ppk/  (Recursively give access to subfolders also).
+
+To set the same permisson to one dir or file to another file or dir
+
+---> getfacl --access /youtube/ | setfacl -d -M- /yt
+
+/youtube/ ---> old dir
+/yt/ ----> New dir
+
+root@Ubuntu-K:/# getfacl --access /youtube/ | setfacl -d -M- /yt
+getfacl: Removing leading '/' from absolute path names
+root@Ubuntu-K:/# getfacl /yt
+getfacl: Removing leading '/' from absolute path names
+# file: yt
+# owner: root
+# group: root
+user::rwx
+group::r-x
+other::r-x
+default:user::rwx
+default:user:appu:rw-
+default:group::r-x
+default:group:nett:rwx
+default:mask::rwx
+default:other::---
+
+root@Ubuntu-K:/# getfacl /youtube/
+getfacl: Removing leading '/' from absolute path names
+# file: youtube/
+# owner: root
+# group: root
+user::rwx
+user:appu:rw-
+group::r-x
+group:nett:rwx
+mask::rwx
+other::---
+
+****************************************************************************************************************************************************************************
+
+To set a same permissions from one file acl to another file acl
+
+getfacl /yt/testacl | setfacl --set-file=- /home/keerthi/Desktop/Test/nat
+
+
+*****************************************************************************************************************************************************************************
+
+To copy the ACL of one directory to the other we use the setfacl command. That is 
+
+setfacl --setfile =- y
+
+As mentioned we want to copy the ACL of "x" to "y", for this we have to type the command 
+
+getfacl x | setfacl -R –setfile = -y
+
+Here "getfacl x" will get the ACL of the directory named "x" and this output is given to the setfacl command using pipe. Thus getfacl will give the ACL of the directory "x" and 
+
+setfacl -R –setfile = -y
+
+ will set that ACL to the directory named "y". "-R" is used to set this ACL recursively.
+
+How to inherit the ACL of parent directory to its child?
+To copy the ACL of the parent directory to its child, use the following command 
+
+getfacl . | setfacl -R --setfile = -subdirectory_name
+
+The "getfacl ." will get the ACL of the parent directory and setfacl will set that ACL to its sub-directories. 
+
+1. Providing ACL for an individual User
+Suppose, you want to give full access to the user “test” (it can be any user at all) on the directory “test_folder”. This can be done using setfacl as follows.
+
+root@linoxide:/home# setfacl -m u:test:rwx test_folder/
+
+root@linoxide:/home# getfacl test_folder/
+# file: test_folder/
+# owner: root
+# group: root
+user::rwx
+user:test:rwx
+group::r-x
+mask::rwx
+other::r-x
+
+2. Providing ACL for all users of a group
+If you want to provide write access permission for all the users of the group “testg” to the folder “test_folder”, you can do it the following way.
+
+root@linoxide:/home# setfacl -m g:testg:w test_folder/
+  
+root@linoxide:/home# getfacl test_folder/
+# file: test_folder/
+# owner: root
+# group: root
+user::rwx
+user:test:rwx
+group::r-x
+group:testg:-w-
+mask::rwx
+other::r-x
+3. Revoking acl of a user/group
+If you want to revoke the permissions that we’ve given for the user test and the group testg, you can use setfacl command as follows.
+
+root@linoxide:/home# setfacl -x u:test,g:testg test_folder/
+
+root@linoxide:/home# getfacl test_folder/
+# file: test_folder/
+# owner: root
+# group: root
+user::rwx
+group::r-x
+mask::rwx
+other::r-x
+4. Copying ACL of one file/directory to another
+Suppose, you want to have the same ACL set of test_folder on test_folder1 too, you can set it by copying the ACL as follows.
+
+root@linoxide:/home# getfacl test_folder/ > acl.txt
+root@linoxide:/home# mkdir test_folder1
+root@linoxide:/home# setfacl -M acl.txt test_folder1/
+root@linoxide:/home# getfacl test_folder1/
+# file: test_folder1/
+# owner: root
+# group: root
+user::rwx
+user:test:rwx
+group::r-x
+group:testg:-w-
+mask::rwx
+other::r-x
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To create a 10 or more than file or dir use the below cmd
+
+Dir ---> mkdir mac{1..10}
+
+text file ---> touch os{1..10}.txt
+ 
+To create inside dir 
+
+mkdir -p 1,2,4,5,6,7
+
+
+********************************************************************************************************************************************************************************************
+
+sudo chmod ugo+rwx uma
+
+$ sudo apt-get install htop
+
+
+sudo nano /etc/sudoers   or   sudo visudo    ----add the users(modify user from user to admin)
+
+su - keerthi---switching user from one to another
+
+
+cd /home    - user checking in home dir
+
+sudo useradd -m keerthi   user add 
+sudo userdel -r karthikeyan user delete
+sudo passwd keerthi
+sudo -i
+#- delet
+
+sudo visudo
+
+sudo less /etc/passwd ---to check user is avavilabe or not
+
+sudo tail /etc/passwd---last check for 10 lines
+
+
+sudo grep appu /etc/passwd /etc/shadow
+
+usermod -l raj appu
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Command: passwd ----> passwd command in Linux is used to change the user account passwords. 
+The root user reserves the privilege to change the password for any user on the system, 
+while a normal user can only change the account password for his or her own account.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ ps -eaf | grep alertc
+
+ kill 104106
+
+
+----------------------------------------------------------Load balancer ------------------------------------------------------------------------------------
+
+systemctl status nginx
+systemctl stop nginx----service stop
+systemctl start nginx---service start
+systemctl restart nginx---service restart
+
+-------------------------------------------------------cmnd prompt cmnds -----------------------------------------------------------------------------------
+
+copy con foldername
+Ren-rename 
+Del--del (folder)
+rd--remove dir
+md--mkdir
+start https://google.com
+start https://gmail.com
+start chrome
+
+md aux\ ------> create a folder (we can't delete , modify, copy,cut)
+rd aux\ ------> To remove the aux file.
+
+-----------------------------------------To Hide the folder -------------------------------------------
+
+Go to the folder and run it as cmnd ..
+ In cmnd prompt write the cmnd to hide ---- ------------ attrib +h +s +r filename.
+ 
+To unhide the folder or bring back to normal state------ attrib -h -s -r filename
+
+----------------------------------------------------------------------------------------------------------
+
+shutdown -----> shutdown /s
+
+Restart ------> shutdown /r
+
+Logout -------> shutdown /l
+
+Shutdown time -----> shutdown /s /t 50(secs) if any msg will come shutdown /s /t 50 /c 'i am going to restart--'
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+To fix the color -------> help color
+
+To chnage the cmnd prompt name ----> prompt your_name 
+ 
+enter the the name.
+ 
+----------------------------------------------------------------------------------------------------------
+
+cls -----> to clear the lines.
+
+all the installed applications to shows ---->  wmic product get name
+
+To save the all output data's from cmnd prompt ----> dir | clip
+
+F7 ---> to view the cmnd lines (history cmnd)
+
+net session --- to check the cmnd prompt your usinf run as administrator or not.
+
+Services which are running currently ---------> tasklist..
+
+To view depthly Services which are running currently --------> tasklist /v.
+
+To change the timings ------/. run the cmnd prompt as administrator and enter the cmnd time 
+

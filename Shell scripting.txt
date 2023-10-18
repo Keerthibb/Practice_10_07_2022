@@ -1,0 +1,139 @@
+What is shell scripting with examples?
+A bash (or shell) script is basically a program that allows the user to interact with the UNIX/Linux system by writing executable shell commands in a simple text file.
+
+Different Types of Shells in Linux
+The Bourne Shell (sh) Developed at AT&T Bell Labs by Steve Bourne, the Bourne shell is regarded as the first UNIX shell ever. ...
+The GNU Bourne-Again Shell (bash) . {Bourne shell(sh) is again developed and called it as bourne again shell}
+The C Shell (csh) ...
+The Korn Shell (ksh) ...
+The Z Shell (zsh)
+
+echo $0 => Used to check the current shell
+
+bash -version
+
+ cat /etc/shells ==> Used to verify the shells list which are supporting to our system.
+# /etc/shells: valid login shells
+/bin/sh
+/bin/bash
+/usr/bin/bash
+/bin/rbash
+/usr/bin/rbash
+/bin/dash
+/usr/bin/dash
+
+Shell scripting : Group of commands
+
+Adding #!/bin/bash as the first line of your script, tells the OS to invoke the specified shell to execute the commands that follow in the script.
+#! is often referred to as a "hash-bang", "she-bang" or "sha-bang"
+
+keerthi@Ubuntu-VM:~$ cat firstscript.sh
+#!/bin/bash
+mkdir 7hills
+echo "Your dir is created"
+touch 7hills/test{1..5}.txt
+echo "Files got created"
+ls -ltr 7hills/*
+echo "ABove are the files"
+rm -rf 7hills/*
+echo "Files are deleted"
+
+Using " source " command or "sh" command or "./" symbol to use to run the scripts
+
+Commonly variables are two types
+
+Variables :- It is nothing but a container, " it can store some data inside them "
+
+1) System defined variables :- It's created, defined and maintained by system (OS)
+
+echo $BASH ==> $ is the system defined variables (used to print the values or alphabets)
+
+keerthi@Ubuntu-VM:~$ cat start.sh
+#!/bin/bash
+#System defined variables
+echo $BASH
+echo $PWD --> pwd in cli mode
+keerthi@Ubuntu-VM:~$ ./start.sh
+/bin/bash
+/home/keerthi
+
+2) User defined variables :- It's created, defined and maintained by us (Users)
+
+#User defined variables
+name=Keerthi
+echo $name
+keerthi@Ubuntu-VM:~$ ./start.sh
+Keerthi
+
+*****************************************************************************************************************************************************
+keerthi@Ubuntu-VM:~$ cat 2nd.sh
+#!/bin/bash
+#Read user input
+
+echo "Enter your name :"
+read name
+echo "entered your name: $name"
+keerthi@Ubuntu-VM:~$ ./2nd.sh
+Enter your name :
+Keerthikumar
+entered your name: Keerthikumar
+
+: To enter the name
+$ To read the name
+***********************************************************************************************************************************************************************
+
+Arguments
+
+keerthi@Ubuntu-VM:~$ cat 2nd.sh
+#!/bin/bash
+echo "Username: $1";
+echo "Age: $2";
+echo "Full Name: $3";
+keerthi@Ubuntu-VM:~$ ./2nd.sh
+Username:
+Age:
+Full Name:
+keerthi@Ubuntu-VM:~$ ./2nd.sh Keerthi 22 Keerthikumar
+Username: Keerthi
+Age: 22
+Full Name: Keerthikumar
+
+
+echo "Total Arguments:" $#   ----> $# used to count the arguments
+echo "All arguments values:" $@  ----> used to display the contents of the arguments
+
+******************************************************************** Using if and else statements ***********************************************************************
+
+Syntax
+if [ expression ]
+then
+   Statement(s) to be executed if expression is true
+else
+   Statement(s) to be executed if expression is not true
+fi
+
+#!/bin/sh
+
+a=10
+b=15
+if [ $a == $b ]
+then
+echo "a is greater than b"
+else
+echo "a is not greater than b"
+fi
+*************************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+curl https://ipinfo.io/ip ; echo
+wget -qO- https://ipecho.net/plain ; echo
+The aforementioned commands retrieve the public IP from the ipinfo.ip website.
+
+curl https://ipecho.net/plain ; echo
+wget -qO- https://ipecho.net/plain ; echo
+These examples fetch your public IP address from the ipecho.net web service.
+
+curl https://ifconfig.me ; echo
+wget -qO- https://ifconfig.me ; echo

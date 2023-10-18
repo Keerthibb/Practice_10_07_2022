@@ -1,0 +1,33 @@
+===>  cal 11 2023   --> To check the date nin the year
+
+To create one dirctory on sub directory :
+
+===> mkdir -p nat/natting/1/2/3/4/5/a/b/x/s/f/s/f
+
+To shutdown or reboot the vm
+
+===> systemctl reboot
+
+===> systemctl poweroff
+
+To set the nologin shell
+
+===> sudo usermod -s /sbin/nologin appu
+
+We can set the own uid and gid for the users
+
+===> sudo useradd -u 1020 -g 1023 clg-3
+
+3 types of permissions
+
+1)Read ---> 4                         Two types of method to give permission
+2)Write ---> 2                        1)Absoulute method ---> Numeric method
+3)Execute ---> 1                      2)Symbollic method ---> Alphabet method
+
+To add multiple users into the group
+
+==> gpasswd -M j-1,j-2 java
+
+
+
+

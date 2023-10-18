@@ -1,0 +1,54 @@
+htop &   ----> Run in background
+
+fg command -----> To bring a background process to the terminal
+
+To check the background services 
+
+---> jobs
+
+---> jobs -l
+
+---> ps command
+
+Once you find out the pidid or process name you can run the below command to check who has executed the command.
+
+-----> ps -au (Give the process information)
+
+------>  ps -aux | grep htop  (or)    ps -aux | grep 1966     || ps -ef | grep htop
+
+--------------------------------------------------------------------------------------------------------------------
+
+To hangup : 1
+Interpreut : 2
+To terminate or stop : 15
+To kill immediately : 9
+
+To kill the process : kill -9 pidid
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Linux is a multi-user operating system and more than one user can be logged into a system at the same time.
+
+For some reason, you may be required to check login history to identify those who have logged into the system recently or within a certain period of time.
+
+This can be done in multiple ways and we will show you how to check the user login history in detail using the last command in this article. However, we will also provide you with a summary of the other commands.
+
+It contains a bunch of useful information about the user such as user name, name of the terminal connected, source IP (from which IP address the user has accessed the system), date, time and how long the user has been logged into the system.
+
+It will help us to analyze certain types of issues. For example, if some files are removed at a particular time and we can enquire the users who logged into the system during that time for first-level troubleshooting.
+
+All source files are located in the following location and these are binary files that cannot be viewed in any text editor.
+
+/var/run/utmp: It contains information about the users who are currently logged onto the system. Who command is used to fetch the information from the file.
+/var/log/wtmp: It contains historical utmp. It keeps the users login and logout history. The last command uses this file to display the information.
+/var/log/btmp: It contains bad login attempts.
+Alternatively, user login information can be verified using the aureport tool, which generates summary reports of the user’s login history.
+
+What is last command?
+last command searches the user information from the ‘/var/log/wtmp’ file and displays a list of all users who have logged in and out since the file was created.
+
+What is lastb command?
+lastb command is the same as last command, by default it shows the log of the file ‘/var/log/btmp’ file, which contains all bad login attempts.
+
+
+--------------------------------------------

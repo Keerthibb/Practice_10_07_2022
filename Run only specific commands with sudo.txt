@@ -1,0 +1,66 @@
+How to Add Users to sudo group in Linux
+
+So it is possible to enable a user to run only specific commands with sudo in Linux. This can be done by modifying the /etc/sudoers file or by adding user specific sudoers configuration file under the /etc/sudoers.d directory.
+
+
+For example, to allow a user called john to restart Network Manager as user root on all hosts, edit the sudoers file and add the line below.
+
+visudo
+To edit sudoers file, you need to be root user or have sudo privileges.
+
+sudo visudo
+Next, add the line below;
+
+john ALL=(root) /bin/systemctl restart NetworkManager
+
+To run specific commands with sudo as any target user, for example to allow user john to restart only Apache service using sudo;
+
+
+john ALL=(ALL) /bin/systemctl restart apache2  or nagios.service || manage ALL=(ALL) /bin/systemctl restart nagios.service
+
+Note that while adding sudo privileges for the user, it is more safer to put the user specific sudo configuration under the /etc/sudoers.d directory for example;
+
+echo "john ALL=(root) /bin/systemctl restart apache2" > /etc/sudoers.d/john
+
+To allow a specific user to run multiple specific commands with sudo;
+
+john ALL=(ALL) /path/to/command1, /path/to/command2, /path/to/command3
+
+Replace /path/to/command with the full path of the commands to run and the arguments (if any).
+
+You can find the full path of the command using which command. For example to locate the full path of the command, command1;
+
+which command1
+You can then run these commands by prefixing them with sudo as in;
+
+sudo systemctl restart NetworkManager
+sudo systemctl restart command1
+For all these commands, you will be prompted to the password for user with which you run these commands as.
+
+Want to run some commands sudo without being prompted for password?
+
+Run sudo Commands Without a Password
+sudo has an option called NOPASSWD that can be used to specify commands that can be run as sudo without being prompted for the password.
+
+For example, to enable user called john to restart Network Manager on an Ubuntu system as any user without being prompted for password, 
+at the line below to sudoers file.
+
+john ALL=(ALL) NOPASSWD: /bin/systemctl restart NetworkManager  || john ALL=(ALL) NOPASSWD: /bin/systemctl restart nagios.service
+
+To restart NetworkManager as any target user and group, add the line below to sudoers file.
+
+
+john ALL=(ALL:ALL) NOPASSWD: /bin/systemctl restart NetworkManager
+You can simply put this line to user specific sudoers file as follows;
+
+echo "john ALL=(ALL) NOPASSWD: /bin/systemctl restart NetworkManager" >> /etc/sudoers.d/john  || echo "john ALL=(ALL) NOPASSWD: /bin/systemctl restart nagios.service" >> /etc/sudoers.d/john
+To restart the Network Manager with sudo;
+
+
+sudo systemctl restart NetworkManager
+To run all sudo commands without password prompt as any user,group on all hosts, enter the line below in sudoers file.
+
+username ALL=(ALL:ALL) NOPASSWD:ALL
+In this guide, you have learnt how to;
+
+

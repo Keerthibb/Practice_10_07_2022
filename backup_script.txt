@@ -1,0 +1,62 @@
+
+
+
+# What to backup.
+backup_files="/Gel/gel.1/"
+
+# Where to backup to.
+dest="/bhavana/backup"
+
+# Create archive filename.
+day=$(date +%A)
+hostname=$(hostname -s)
+archive_file="$hostname-$day.tar"
+
+# Print start status message.
+echo "Backing up $backup_files to $dest/$archive_file"
+date
+echo
+
+# Backup the files using tar.
+tar czf $dest/$archive_file $backup_files
+
+# Print end status message.
+echo
+echo "Backup finished"
+date
+
+# Long listing of files in $dest to check file sizes.
+ls -lh $dest
+
+#Change the directory
+cd /Gel/gel.1/
+
+find /Gel/gel.1/ -mtime +5 -exec rm  -rf {} \;
+
+#find /Gel/gel.1/ -type d -name '* -mtime +5 -exec rm {} \;
+
+
+# m h dom mon dow   command
+0 0 * * * bash /usr/local/bin/backup.sh
+
+
+
+
+
+
+
+
+
+
+#!/bin/bash
+
+tar -cvf /bhavana/backup/arhive.tar /Gel/gel.1/ || tar -uvf /bhavana/backup/arhive.tar /Gel/gel.1/
+
+
+# Compress the folder with foldername + date and take backup
+filename="backup_`date +%d`_`date +%m`_`date +%Y`.tar";
+
+# Create compressed file using tar and move to backup folder
+tar cvf /Gel/$gel.1 /bhavana/backup/
+
+find "/Gel/gel.1" -type f -mtime +5 -exec rm {} \;

@@ -1,0 +1,39 @@
+Step 1: yum versionlock list
+-->kernel-core-0:4.18.0-305.el8.*
+-->kernel-0:4.18.0-305.el8.*
+-->kernel-modules-0:4.18.0-305.el8.*
+
+Step 2: yum updateinfo --security --exclude=kernel* | wc -l
+-->18 Security notice(s)
+
+Step 3: cat /etc/*release
+--> Red Hat Enterprise Linux 8.4 (Ootpa)
+
+Step 4: uname -r
+--> 4.18.0-305.el8.x86_64
+
+Step 5: java -version
+--> openjdk version "1.8.0_292" (build 1.8.0_302-b08)
+Step 5.1: ls -li /usr/lib/jvm
+-->latest -> /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.el8_4.x86_64/
+
+Step 6: yum update --security --exclude=kernel*
+--> Yes
+Step 7: Reboot the instance after package install
+
+After Reboot:
+
+Step 8: cat /etc/*release
+--> VERSION="8.4 (Ootpa)"
+
+Step 9: uname -r
+--> 4.18.0-305.el8.x86_64
+
+Step 10: yum update --security --exclude=kernel*
+--> Just cross check and be sure there is no patches for update
+
+Last Step:
+ls -li /usr/lib/jvm
+
+-->latest -> /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.302.b08-0.el8_4.x86_64/
+

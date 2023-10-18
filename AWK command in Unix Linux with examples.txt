@@ -1,0 +1,58 @@
+Awk is mostly used for pattern scanning and processing. It searches one or more files to see if they contain lines that matches with the specified patterns and then perform the associated actions
+
+
+awk '{print$}' filename
+
+awk '{print$1,$4}' filename
+
+
+Print the lines which match the given pattern. 
+
+$ awk '/manager/ {print}' employee.txt 
+
+Splitting a Line Into Fields
+
+$ awk '{print $1,$4}' employee.txt 
+
+Use of NR(Number of records) built-in variables (Display Line Number)  
+
+$ awk '{print NR,$0}' employee.txt 
+
+Another use of NR built-in variables (Display Line From 3 to 6)  
+
+$ awk 'NR==3, NR==6 {print NR,$0}' employee.txt 
+
+AWK Command
+
+awk '{print $0}' /etc/passwd
+
+awk '/root/ {print $0}' /etc/passwd --> Looking for root matching pattern
+
+awk 'NR>=3 { print NR,$0 }' /etc/passwd  --> Print the line range greater than 3
+
+syntax:
+awk 'BEGIN{start_action} pattern/condition{action} END{stop_action}' filename
+
+ Displaying the Records of a Text File Lying within a Specified Range:
+awk ‘NR==4, NR==8 {print NR,$0}’ Names.txt
+
+
+nslookup sftp.coupons.com | grep -e "ca1" | head -1 | cut -f 2 | awk -v FS="(sftp.|.coupons.com.)" '{print $2}'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

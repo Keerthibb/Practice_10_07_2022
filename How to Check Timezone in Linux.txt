@@ -1,0 +1,18 @@
+1)We will start by using the traditional date command to find out present timezone as follows:
+
+$ date
+Alternatively, type the command below, where %Z format prints the alphabetic timezone and %z prints the numeric timezone:
+
+$ date +"%Z %z"
+
+2. Next, you can likewise use timedatectl, when you run it without any options, the command displays an overview of the system including the timezone like so:
+
+$ timedatectl ---> Use full command
+
+More so, try to employ a pipeline and grep command to only filter the timezone as below:
+
+$ timedatectl | grep “Time zone”
+
+3) In addition, users of Debian and its derivatives can display the content of the file /etc/timezone using cat utility to check your timezone:
+
+$ cat /etc/timezone

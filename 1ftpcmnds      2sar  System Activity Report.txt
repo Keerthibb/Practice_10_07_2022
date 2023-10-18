@@ -1,0 +1,48 @@
+1) need to check updates --> sudo apt-get update
+2) sudo apt install vsftpd
+3) sudo nano /etc/vsftpd.conf
+4) sudo systemctl restart vsftpd
+5) sudo systemctl enable  vsftpd
+6) sudo systemctl status vsftpd
+7)
+
+-----------------------------------------------------------------------------------------------------------
+
+sar : System Activity Report 
+
+
+===> sar -u 1 10 or sar -uh 1 10  ====> 1 every one sec and the 10 interval 
+
+
+sar -p -s 16:00:00 -e 18:00:00 -f sa12
+
+VMstat command : vmstat  -a, --active           active/inactive memory
+
+====> vmstat -d, --disk             disk statistics
+
+
+pidstat -p -v -s 16:00:00 -e 18:00:00 -f sa12 5
+
+
+How to Find High CPU Consumption Processes in Linux
+
+# top -c -b | head -50
+
+If you want to see the full path of the command instead of the command name, run the following top command format.
+
+# top -b | head -50
+
+---------------------------------------------------------------------------------------------------------------
+
+
+sudo apt install sysstat
+
+nano /etc/default/sysstat --> To chnage deom ENABLED="false" to ENABLED="true"
+
+sudo service sysstat restart
+
+--> sar 1 5 -o /tmp/data > /dev/null 2>&1 --->  saving sar output (using -o)
+
+---> sar -f /tmp/data
+
+

@@ -1,0 +1,38 @@
+du -sch .[!.]* * |sort -h  ===> To check hidden files
+
+du -sh /*
+
+du -sch /*
+
+sudo ncdu -rx / should give a clean read on biggest dirs/files ONLY on root area drive.
+ (-r = read-only, -x = stay on same filesystem (meaning: do not traverse other filesystem mounts) )
+
+
+sudo du -sh /* | sort -hr
+
+***************************************Temp files *******************************************************************************************
+
+du -max /var/tmp | sort -rn | head -20
+
+du -max /tmp | sort -rn | head -20
+
+du -max /var/spool/mail | sort -rn | head -20
+
+du -max /var/log | sort -rn | head -20
+
+find / -xdev -name core -ls -o  -path "/lib*" -prune --> check for dump files
+
+du -max / | sort -rn | head -20
+
+The below command to remove temp files,
+
+ sudo rm -rf /tmp/*
+
+apt-get autoremove will remove automatically all unused packages.
+
+Below command will remove all the unnecessary package files, which are no longer used by their packages. You can say they are orphaned files, not needed anymore.
+sudo apt-get autoremove
+
+Below command will remove all the cache and unnecessary files from your system. It will delete everything and make your system clean from temporary files and orphaned files.
+sudo apt-get clean
+

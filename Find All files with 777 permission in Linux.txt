@@ -1,0 +1,50 @@
+In this example, locate or find all file belongs to a user called “vivek” in /var directory:
+
+# find /var -user vivek
+
+
+
+Find All files with 777 permission in Linux
+
+
+find / \( -type f -o -type d \) -perm 777 > output.txt
+
+
+find /appl -perm 777
+
+
+List of files which have only access to this specific user 
+
+find / -user kumar
+
+find / -user keerthi
+
+cat /etc/passwd
+
+stat -c '%a' /etc/passwd
+
+Right file permission is the most crucial part of the Linux system management. A file with permission 777 is open to everyone for read and write. Any user logged in to system can write to this file. Which can be harmful for your system.
+
+In some condition’s, you may required 777 permissions like log file etc. But mostly we don’t required it. This tutorial will help you to search files with 777 permission on your Linux/Unix system via find command.
+
+Syntax:
+
+find /path/to/dir -perm 777 
+The -perm command line parameter is used with find command to search files based on permissions. You can use any permission instead of 777 to find files with that permissions only.
+
+For example to search all files with permission 777 under the logged in user home directory, type:
+
+find $HOME -perm 777 
+The above command will search all files and directories with permission 777 under the specified directory.
+
+Linux command find files with 777 permissions
+
+But if you don’t want to include directories in this list. Define the type with -type on command line parameter as below. This will search only files with permission 777 under the /var/www directory.
+
+find /var/www -perm 777 -type f 
+Linux command find files only with 777 permissions
+
+To search directory only, type:
+
+find /var/www -perm 777 -type d 
+Hope this tutorial helps you search files based on permissions and secure your Linux/Unix system.

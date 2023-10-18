@@ -1,0 +1,20 @@
+To create a dir or file in specific path  
+
+----> mkdir -p /tmp/testfile/ (and give the path name to create a directory)
+
+To create n number of directory
+
+----> mkdir -p {hai1,hello,how,are,you}
+
+To create one dirctory on sub directory :
+
+===> mkdir -p nat/natting/1/2/3/4/5/a/b/x/s/f/s/f
+
+-----> mkdir -p puppy/{test,test2,test1,tyet4,ytsey}  (puppy is the main directory)
+
+using logic OR opertaor : To check the folder exist or will it create a dir
+
+----> [ -d /tmp/horlicks ] || mkdir /tmp/horlicks      ----> -d indicates that to create a dir
+
+----> [ -f /tmp/horlicks/licks ] || touch /tmp/horlicks/licks  ----> -f indicates that to create a file
+

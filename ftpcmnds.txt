@@ -1,0 +1,29 @@
+1) need to check updates --> sudo apt-get update
+2) sudo apt install vsftpd
+3) sudo nano /etc/vsftpd.conf
+4) cd /srv/ftp/ go to this file and create a dir
+5) sudo systemctl restart vsftpd
+6) sudo systemctl enable  vsftpd
+7) sudo systemctl status vsftpd
+8) netstat -ultpn | grep 21
+
+adduser ftp_user
+mkdir /home/ftp_user/ftp
+chown nobody:nogroup /home/ftp_user/ftp/
+chmod a-w /home/ftp_user/ftp/
+ mkdir /home/ftp_user/ftp/share_files
+chown ftp_user:ftp_user /home/ftp_user/ftp/share_files/
+systemctl restart vsftpd
+systemctl status vsftpd
+
+-----------------------------------------------------------------------------------------------------------
+
+sar : System Activity Report 
+
+===> sar -u 1 10 or sar -uh 1 10  ====> 1 every one sec and the 10 interval 
+
+
+sar -p -s 16:00:00 -e 18:00:00 -f sa12
+
+
+pidstat -p -v -s 16:00:00 -e 18:00:00 -f sa12 5

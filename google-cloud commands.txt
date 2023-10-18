@@ -1,0 +1,316 @@
+Login into cob server
+
+gcloud init >> to intiate the gcloud 
+gcloud compute instances list  >> to get list of VM's
+gcloud beta compute ssh wsux-3 --internal-ip >> to get IP of machine/node
+gcloud compute instances list | grep wsrt-1
+ssh -i ~/.ssh/google_compute_engine -o "StrictHostKeyChecking no" -t kbb_quotient_com@10.80.15.176  >> to login to the particular server
+gcloud beta compute --project "riq-poc" ssh --zone "us-west1-b" ilprc-0 --internal-ip
+
+Gcloud Login 
+
+gcloud compute ssh bi-uat-msdb01 --project prj-deng-bi-np --zone us-west2-a --internal-ip
+
+
+gcloud compute ssh wst2a-dev-dse04 --project prj-promoplat-np --zone us-west2-b --internal-ip
+
+gcloud beta compute --project "prj-promoplat-np" ssh --zone "us-west2-b" wst2a-dev-dse04 --internal-ip
+
+gcloud compute ssh wst2a-dev-dse04 --prj-promoplat-np --zone us-west2-b --internal-ip
+
+Kubectl 
+
+GCP basic commands:
+
+gcloud config set project riq-poc --> To set the project
+
+ex: gcloud config set project riq-west-dev1 
+
+gcloud config set project prj-deng-bi-np
+
+gcloud config set project prj-promoplat-p
+
+gcloud compute project-info add-metadata --metadata google-compute-default-region=us-east1,google-compute-default-zone=us-east1-b
+
+To get the compute imsages list --> gcloud compute images list
+
+To get the projects --> gcloud projects list
+
+Check instance state in gcloud Describes [Do not run in prod] --> gcloud compute instance describe demo-instance[instance-name]
+
+TO get current Region --> gcloud config get-value compute/region
+
+To get current zone --> gcloud config get-value compute/zone
+
+To get region list --> gcloud compute regions list
+
+To get zone list --> gcloud compute zones list
+
+To set Default region --> gcloud config set compute/region us-west1
+
+To set Default zone --> gcloud config set compute/zone us-west1-b
+
+To login --> gcloud compute ssh quotient-lists-2 --internal-ip || gcloud compute ssh webapp --zone us-east1-d
+
+To check the cronjob status --> kubectl get cronjobs -n prod | grep platform-event-retry-job  [False-> Resumed, True->Suspended]
+
+To get get Instance list --> gcloud compute instances list
+
+gcloud compute instances stop test-instance
+
+gcloud compute instances stop ucd-proxy-east-0 --project riq-poc
+
+gcloud compute instances start bi-prd-msis02 --project prj-deng-bi-p --zone us-west2-b
+
+gcloud compute instances start <INSTANCE_NAME>
+
+GKE basic commands - 
+
+Switch to cluster
+
+gcloud container clusters get-credentials CLUSTER_NAME --region=COMPUTE_REGION
+
+gcloud container clusters get-credentials tahoe-prod-cluster03 --region us-east4
+
+gcloud container clusters get-credentials gke-riq-uswst2-prod-active --region us-west2
+
+gcloud container clusters get-credentials gke-riq-usest4-prod-active --region us-east4
+
+====================> Cron jobs
+
+gcloud container clusters get-credentials gke-tahoe-batch-jobs-uswst2-active --region us-west2
+
+gcloud container clusters get-credentials gke-tahoe-batch-jobs-usest4-active --region us-east4
+
+=====================
+
+gcloud container clusters get-credentials tahoe-prod-cluster02 --region us-west2
+
+gcloud container clusters get-credentials tahoe-pn1-cluster01 --region us-west2
+
+gcloud container clusters get-credentials tahoe-pn2-cluster01 --region us-east4
+
+gcloud container clusters get-credentials tahoe-qa-cluster01 --region us-west2
+
+gcloud container clusters get-credentials tahoe-qa-cluster01 --region us-west2
+
+gcloud compute instances list --project riq-poc | grep scheduler-200
+ 
+gcloud compute instances list --project riq-poc | grep amq*
+
+To check deployment 
+
+kubectl get deploymentname -n namespace
+
+Example:
+kubectl get deployment -n prod 
+
+kubectl get deployment/redeem-payout-consumer -n prod
+
+kubectl get deployment/reward-status -n prod
+
+To check the pod detail information  
+
+kubectl describe deployment reward-status-consumer -n prod || kubectl get pod -o wide -n prod | grep reward ||  kubectl get pods -n prod | grep reward
+
+ex: kubectl describe deployment rebate-service -n prod | grep "Replicas"
+
+To check the particular pod service
+
+kubectl get pods -n prod | grep "reward-status-consumer-89645d9c9-wt57g"
+
+To check the particular cron job
+
+kubectl get cronjobs -n prod | grep platform-event-retry-job
+
+To restart all pods under particular deployment
+
+kubectl rollout restart deployment [deployment name] -n prod
+
+ex: kubectl rollout restart deployment cosine-sim-update-consumer -n prod  [Restart the pods one by one i.e, sequential restart]
+
+To check Particular deployment:
+
+kubectl get deployment/deploymentname -n namespace
+
+Example: 
+kubectl get deployment/user-profile-service -n prod
+
+List pods : 
+
+Kubectl get pods -n namespace
+
+Example: 
+kubectl get pods -n prod
+
+List pods under particular deployment
+
+kubectl get pods -n namespace | grep deploymentname
+
+Example: 
+kubectl get pods -n prod | grep user-profile-service
+
+To check Logs:
+
+kubect logs pods/Deployment
+
+Example:
+kubectl logs user-profile-service-22323e2323ewq
+kubectl logs user-profile-service
+
+To delete pods:
+
+kubectl delete pod podname
+
+Example:
+
+kubectl delete pod user-profile-service-32322322332
+
+To scale up and scale down:
+
+kubectl scale --replicas=no-of-replicas deployment/deploymentname -n namespace
+
+Example: 
+kubectl scale --replicas=4 deployment/user-profile-service -n prod
+
+kubectl scale --replicas=5 deployment/cosine-sim-update-consumer -n prod  [It will scale down/scale up it to 5]
+
+kubectl get deployment cosine-sim-update-consumer -n prod
+
+To check the pod liveness
+
+kubectl exec reward-status-consumer-89645d9c9-wt57g -n prod -- curl http://localhost:8080/reward-status-consumer/actuator/health/liveness
+
+kubectl exec metrics-server-v0.5.2-7997fbf85b-djs9t -n kube-system -- curl https://10.81.48.50:10250/livez
+
+To check the IP address 
+
+kubectl get pods --all-namespaces -o wide
+
+root@KBB-LT:~# kubectl get pods --all-namespaces -o wide | grep 10.81.51.130 | awk '{print $1,$2,$7,$8}'
+vector vector-logshipper-tn8t8 10.81.51.130 gke-tahoe-prod-cluster03-pool3-1f10cd24-w6j9
+root@KBB-LT:~#
+
+for k in {10.81.48.14,52.141,51.139}; do kubectl get pods --all-namespaces -o wide | grep -w $k | sort --unique | awk '{print $1,$2,$7,$8}'; done
+
+(or)
+
+for k in {10.81.48.14,52.141,51.139}; do kubectl get pods --all-namespaces -o wide | grep -w $k | awk '{print $1,$2,$7,$8}'; done
+
+Test commands
+
+gcloud compute instances delete NAMES[NAMES...] [ --zone = ZONE] [ --delete-disks =  DISK-TYPE | --keep-disks=DISK-TYPE]] [GLOBAL-FLAG ...]
+
+kubectl Cheat Sheet:- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+#gcloud components install kubectl - to install kubectl utility/ plugin (works on linux , may work in windows invironment)(for it to work 1st install google SDK)
+
+#gcloud container clusters list --> to list of GKE cluster running
+
+#gcloud container clusters --get-credentials <cluster name> --region <region name> - to access a cluster before running kubectl command to work on the the cluster
+
+#kubectl config current-context --> show the cluster name where you are at the moment.
+
+$ kubectl config get-contexts
+
+$kubectl auth can-i --list  --> To check access
+
+#kubectl get deployments -n prod - to list down the list of deployments running.
+
+#kubectl get pods -n prod| grep <deployment name> -  to the list of pod matching a specifc deployment
+
+#kubectl rollout restart deployment/<deployment name> -n namespace   - Rolling restart of the "<deploymentname>" deployment
+
+#gcloud compute machine-types describe n2-highmem-4 --zone us-west1-a
+
+#gcloud compute instances describe ilprc-200
+
+#gcloud projects list --format='table(projectId)'
+
+#gcloud compute instances list --project={p} --format=json
+
+#gcloud compute instances list --project riq-poc --filter="name~atc-rest-*." --format="table(NAME, INTERNAL_IP)"
+
+#for i in {201..208} ;do echo kafka-consumer-$i; gcloud compute ssh --internal-ip kafka-consumer-$i  --command "/etc/init.d/ATC_KC status"; done
+
+#gcloud auth list
+
+#gcloud iam service-accounts list
+
+#kubectl exec -it busybox-deployment-66458f7d4b-8fq5n /bin/sh
+
+#kubect get services || kubectl get services --namespace qa | grep sheal
+
+#kubectl describe services "service-name" | ex : kubectl describe services "web-server"
+
+#kubectl describe nodes
+
+#kubectl get pods --namespace prod
+
+#kubectl get ingress
+
+#kubectl -n deployments get pod || watch -n 1 kubectl -n deployments get pod
+
+#kubectl top pods -n deployment
+
+#kubectl get -n deployments deployments "deployment-name" || #kubectl get -n deployments "deployment-name"
+
+#kubectl api-resources
+#kubectl describe -n deployments hpa
+
+kubectl get pod,replicaset,deployment
+
+To check runtime logs.
+
+#kubectl logs -f -l app=rebate-service -n prod
+
+To restart rebate service.
+
+#kubectl rollout restart deployment/rebate-service -n prod 
+
+kubectl rollout restart deployment/get-all-offers-ns -n prod
+
+kubectl get pods -n prod | grep  get-all-offers-ns
+
+$ kubectl config get-contexts
+
+kubectl config use-context my-context-name ==> to switch contexts
+
+Redis keys fetch
+
+gcloud config set project riq-poc
+
+gcloud compute ssh qt-tahoe-prd-east4-redis-offers-4 --project riq-poc --zone us-east4-b --internal-ip
+
+Path : /opt/redis/redis-6.0.5/
+
+=> ./redis-cli -h qt-tahoe-prd-east4-redis-offers-4 -p 7986 -c
+
+GET REBATES-OFFER|3.0|5fd72edf-d74e-4270-bdfb-f6e04062fd58|2bfcc2e2-638a-4dba-a6e0-04eb3d01de69
+
+# kubectl explain deployment
+
+
+
+
+
+root@KBB-LT:~# kubectl describe deployment shopmium-wallet-consumer -n prod  | grep Repli
+Replicas:               3 desired | 3 updated | 3 total | 3 available | 0 unavailable
+  Progressing    True    NewReplicaSetAvailable
+  Available      True    MinimumReplicasAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   shopmium-wallet-consumer-9c8b66b5 (3/3 replicas created)
+root@KBB-LT:~# kubectl describe deployment shopmium-wallet-consumer -n prod  | grep Live
+    Liveness:   http-get http://:8080/shopmium-wallet-consumer/actuator/health/liveness delay=50s timeout=1s period=30s #success=1 #failure=3
+root@KBB-LT:~#
+
+root@KBB-LT:~# kubectl get deployments -n prod | grep cosine-sim-eval-consumer
+
+root@KBB-LT:~# kubectl scale --replicas=0 deployment/cosine-sim-update-consumer -n prod   [10-0] scale down
+
+root@KBB-LT:~# kubectl get deployments -n prod | grep cosine-sim-update-consumer
+
+root@KBB-LT:~# kubectl scale --replicas=3 deployment/cosine-sim-update-consumer -n prod     [0 to 3]scaleup
+
+root@KBB-LT:~# kubectl get deployments -n prod | grep cosine-sim-update-consumer
+
+root@KBB-LT:~# kubectl get deployments -n prod -o wide | grep cosine-sim-update-consumer

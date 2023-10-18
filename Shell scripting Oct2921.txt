@@ -1,0 +1,21 @@
+Shell scripting
+
+Redirect output
+
+**************************Comments *****************************************************************************************************************************
+
+How to add the comment in multiple lines
+ ---> On top of the line we need to give : ' --> Symbol and in the end-of the line we need to give ' symbol.
+ 
+ Doc delemeter :- If we want to show the result lines as we thought we would use delemeter.
+ 
+ cat << name and in the end of the line should give the same name.
+ 
+ ex : cat << creating in the end-of the line need to give the same creating name.
+ 
+ 
+ ********************************* Conditional statement *******************************************************************************************************
+ 
+ -eq ==> equal and -ne ==> not equal, -gt ==> greater than  (<  >)
+ 
+ if , else, ifelse and elseif statement

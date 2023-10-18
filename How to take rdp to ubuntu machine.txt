@@ -1,0 +1,12 @@
+---> sudo apt update 
+---> sudo apt install xrdp
+---> sudo systemctl enable --now xrdp  (enabling rdp app)
+---> sudo ufw allow from any to any port 3389 proto tcp  (port enabling on firewall).
+
+
+
+ ----*----
+To take rdp from ubuntu machine.
+
+---> sudo apt install xrdp
+---> open the reminna application and configure over all the thing.

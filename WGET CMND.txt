@@ -1,0 +1,63 @@
+1) need to check updates --> sudo apt-get update
+2) sudo apt install vsftpd
+3) sudo nano /etc/vsftpd.conf
+4) sudo systemctl restart vsftpd
+5) sudo systemctl enable  vsftpd
+6) sudo systemctl status vsftpd
+
+----------------------------WGET CMND ---------------------------------------------------
+
+
+How to download a WebPage using wget command?
+The basic format to download a  file from the web using Wget command.
+
+wget http://example.com/sample.php
+
+2. How to download a file using FTP server ?
+​Wget uses the anonymous FTP to download the files from the web. It does't require FTP logins to download the files. 
+
+wget ftp://ftp.example.com/file.tar.gz
+
+3. How to download a file from untrusted secure URL ?
+​By using this option "--no-check-certificate", We can ignore checking the validity of the certificate.
+
+wget https://example.com/file.tar.gz –no-check-certificate
+
+4. How to mirror a complete website using wget command ?
+​-m option stands for turn on mirroring. We can download all the website files using.
+
+wget -m https://example.com/
+
+5. How to download reading URL's from a file ?
+Read URLs from a local or external file. If - is specified as file, URLs are read from the standard input.
+
+wget -i filename
+
+6. How to allow wget to overwrite the files?
+If we specify the output file using the -o option, it will overwrite any existing file.
+
+wget -q http://www.example.com/filename.txt -O /path/filename.txt
+
+7. How to download the files in background ?
+​For a huge download, We can put the download in background using Wget option -b as shown below.
+
+wget -b http://www.example.com/samplepage.php
+
+8. How to resume the partially downloaded file?
+Wget can be used to resume an interrupted download file using the -c option as below
+
+wget -c http://example.com/samplefile.tar.gz
+
+9. How to limit the download speed while downloading the files?
+If we want to limit the speed of Wget we can do it, with the option –limit-rate. The command will look like this as below.
+
+wget –limit-rate=128k http://example.com/sample.png
+
+10. How to check the version of wget?
+If we can check the version of Wget command as below 
+
+wget –version
+
+
+
+

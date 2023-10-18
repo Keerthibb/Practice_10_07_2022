@@ -1,0 +1,73 @@
+-------->   https://www.tecmint.com/commands-to-collect-system-and-hardware-information-in-linux/
+
+------->  https://www.tecmint.com/install-ftp-server-in-ubuntu/
+
+------->  https://helpdeskgeek.com/windows-10/install-and-setup-a-website-in-iis-on-windows-10/
+
+------>  https://docs.mongodb.com/manual/tutorial/rotate-log-files/
+
+------->  https://kb.fortinet.com/kb/documentLink.do?externalID=FD36043
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+https://www.fastwebhost.in/blog/10-examples-of-linux-wget-command/#:~:text=Wget%20command%20is%20a%20Linux,will%20run%20in%20the%20background.
+
+https://www.python.org/downloads/
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-openvpn-server-on-ubuntu-16-04
+
+https://pcsupport.lenovo.com/in/en/products/laptops-and-netbooks/thinkpad-edge-laptops/thinkpad-e470/20h1/20h10052ig/pg010sxw/parts/display/as-built
+
+https://unifiedportal-mem.epfindia.gov.in/memberinterface/
+
+https://www.partitionwizard.com/resizepartition/extend-volume-grayed-out.html
+
+https://www.partitionwizard.com/free-partition-manager.html
+
+https://helpdeskgeek.com/windows-10/install-and-setup-a-website-in-iis-on-windows-10/
+
+https://www.anaconda.com/products/individual
+
+https://www.cyberciti.biz/faq/how-to-check-open-ports-in-linux-using-the-cli/
+
+https://www.cyberciti.biz/faq/howto-list-installed-rpm-package/
+
+https://zoom.us/download
+
+https://www.geeksforgeeks.org/sar-command-linux-monitor-system-performance/
+
+https://www.videolan.org/vlc/download-windows.html
+
+https://powerbi.microsoft.com/en-us/downloads/
+
+https://passbook.epfindia.gov.in/MemberPassBook/Login ---PF
+
+https://kifarunix.com/run-only-specific-commands-with-sudo-in-linux/ --> Run only Specific Commands with sudo in Linux
+
+https://www.tecmint.com/create-multiple-user-accounts-in-linux/  --> How to Create Multiple User Accounts in Linux
+
+https://tecadmin.net/run-shell-script-as-systemd-service/  --> How to Run Shell Script as SystemD Service in Linux
+
+https://gigacourse.com/9-aws-certified-solutions-architect-associate-2018/
+
+https://tecadmin.net/find-files-with-permission-777-in-linux/ --> Find All files with 777 permission in Linux
+
+https://gigacourse.com/page/2/?1
+
+https://www.javatpoint.com/aws-storage-classes#:~:text=S3%20Glacier%20%20%20%20%20%20,minutes%20or%20hours%20%206%20more%20rows%20 --> AWS Storage Classes
+
+https://www.tecmint.com/35-practical-examples-of-linux-find-command/ --> Linux Find Command
+
+https://www.freecodecamp.org/news/subnet-cheat-sheet-24-subnet-mask-30-26-27-29-and-other-ip-address-cidr-network-references/ --> Subnet Cheat Sheet – 24 Subnet Mask, 30, 26, 27, 29, and other IP Address CIDR Network References
+
+https://access.redhat.com/security/security-updates/#/security-advisories --> 
+
+https://www.terraform.io/downloads
+
+https://www.thegeekstuff.com/2012/08/lsof-command-examples/ --> Linux lsof Command Examples (Identify Open Files)
+
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html --> Extend a Linux file system after resizing a volume
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-1804 --> How to Set Up SSH Keys on Ubuntu 18.04
+
+https://www.abuseipdb.com/check/ --> To check the abusive IP range.

@@ -1,0 +1,75 @@
+umask (user file creation mode mask) is used to determine the file permission for newly created files.
+It can be used to control the default file permission for new files. It's four digit octal number.
+-> Symbolic values
+-> Octal values
+
+Read = 4
+Write = 2
+Exe  = 1
+
+Umask value
+
+The default value of file is 666
+The default value of dir is 777
+
+umask
+0002
+
+Text file ===> -rw-rw-r--
+  4+2 = 6
+ 
+  666
+ -664
+-------
+= 002 ---> The umask value of text file.
+
+
+Dir ==> drwxrwxr-x
+          4+2+1 = 7
+  777
+ -775
+-------
+= 002 ---> The umask value of text dir.
+
+*******************************************After changing the umask value *****************************************************************************************
+keerthi@Ubuntu-K:~/Desktop/Test/proc/{1...10}$ umask 0000
+keerthi@Ubuntu-K:~/Desktop/Test/proc/{1...10}$ touch afterumask
+keerthi@Ubuntu-K:~/Desktop/Test/proc/{1...10}$ mkdir after-umask
+keerthi@Ubuntu-K:~/Desktop/Test/proc/{1...10}$ ls -l
+total 4
+drwxrwxrwx 2 keerthi keerthi 4096 May 16 20:54 after-umask
+-rw-rw-rw- 1 keerthi keerthi    0 May 16 20:54 afterumask
+
+*******************************************************************************************************************************************************************
+
+The touch cmnd default permissions are : -rw-rw-r-- 
+The mkdir cmd default permissions are : drwxrwxr-x
+
+The dir doesn't execute
+
+************************************************************************SUID, SGID,Sticky bit***********************************************************************
+
+SUID (Set user ID)---> Set user id is 4
+
+If SUID bit is set on a file and a user executed it. The process will have the same rights as the owner of the file being executed.
+
+
+SGID (Set group ID) ---> Set group id is 2
+Same as SUID, The process will have the same group rights of the file being executed. 
+If SGID bit is set on any directory, all subdirectories and files created inside will get the same group ownership as the main directory, 
+it doesn’t matter who is creating.
+
+
+Sticky bit ---> Sticky bit id is 1
+To assign the file permission or dir permission so that other user or except owner can't delete the file or folder accidentally.
+The Sticky bit will prevent to delete other ownership files from the other users.
+drwxrwxr-T+   4 root root       4096 Jun 21 14:09 tooth {+T indiactes sticky bit}
+
+
+
+
+
+
+
+
+ 

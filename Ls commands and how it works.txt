@@ -1,0 +1,65 @@
+ls ../client/ to list out the files from back to dir
+
+Linux / UNIX List Just Directories Or Directory Names
+
+----> Display or list all directories in Unix
+
+Linux list only directories using ls command
+
+Run the following ls command:
+ls -d */ or ls -ltd */
+
+ls -l -d */  or ls -ld */ ---> Listing directories Also we can find out the disk usage using this command ---> ls -lthd */
+
+
+
+Total count of directories
+
+$ ls -l -d */ | wc -l or ls -lthd */ | wc -l
+
+Total count of files
+
+$ ls | egrep -v 'd' | wc -l
+
+----> Linux Display or list only files
+
+Type the following command to display list only files in Linux or Unix:
+
+$ ls -l | egrep -v '^d' or tree -lth | egrep -v 'd'
+
+To list out the files.
+
+$ ls | wc -l
+
+To list out the files from the sorting first name  
+
+
+ls -tr | head -n -15 | xargs rm -rf  -----> To keep 15 head files and remove the rest of the files.
+
+ ls -lnv (or)  ls -ltvs ----> Will sort out the asscedning order.
+
+ ls -tvrl ----> Will sort out the disscedning order.
+ 
+ ls -tvrl | head -n -6 | xargs rm -rf  || (ls -tvrl | head -5 | xargs rm -rf)====> delete 5 head files and keep the rest of the things
+
+ ls -tvrl | tail -n -6 | xargs rm -rf ===> delete 5 tail files and keep the rest of the things
+
+To findout the file ---->  find . -name serverlogs.bz2(file name ===> serverlogs.bz2)
+
+
+(?-1, ??-2 , ???-3)
+
+ls ? --> It will show the single character name file  
+
+rm ? --> It will remove the single character name file
+
+
+
+
+ls -d -1tr /path/to/folder/* | head -n -10 | xargs -d '\n' rm -f
+
+You can delete file with specific name pattern and numbers of day old using
+
+find /Users/test/delete/*.zip -mtime +10 -exec rm {} \;
+
+find . -mtime +7 -exec rm -rf {} \;

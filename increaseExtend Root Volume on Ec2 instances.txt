@@ -1,0 +1,30 @@
+Steps to increase/Extend Root Volume on Ec2 instances
+
+Step 1: fdisk -l
+step 2: Need To identify your EBS volume is which kind of file system
+cat /etc/fstab
+step 3: growpart /dev/nvme1n1
+step 4: xfs_growfs -d /appl
+
+
+
+
+
+sudo growpart /dev/nvme0n1 1
+
+
+ubuntu@ip-172-31-11-148:~$ df -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+udev           devtmpfs  1.9G     0  1.9G   0% /dev
+tmpfs          tmpfs     390M  5.9M  384M   2% /run
+/dev/nvme0n1p1 ext4      146G   87G   59G  60% /
+tmpfs          tmpfs     2.0G   16K  2.0G   1% /dev/shm
+tmpfs          tmpfs     5.0M     0  5.0M   0% /run/lock
+tmpfs          tmpfs     2.0G     0  2.0G   0% /sys/fs/cgroup
+/dev/loop0     squashfs  111M  111M     0 100% /snap/core/12725
+/dev/loop1     squashfs   56M   56M     0 100% /snap/core18/2284
+/dev/loop2     squashfs   25M   25M     0 100% /snap/amazon-ssm-agent/4046
+/dev/loop3     squashfs   56M   56M     0 100% /snap/core18/2253
+/dev/loop4     squashfs   27M   27M     0 100% /snap/amazon-ssm-agent/5163
+tmpfs          tmpfs     390M     0  390M   0% /run/user/1000
+ubuntu@ip-172-31-11-148:~$ sudo resize2fs /dev/nvme0n1p1

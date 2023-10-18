@@ -1,0 +1,190 @@
+Logical volume manager (LVM)
+
+LVM's are made by physical volumes which means multiple hard drive
+
+Performance is high comprare to standard disk
+
+
+
+## scan for new hardware changes
+
+ls /sys/class/scsi_host/ | while read host ; do echo "- - -" > /sys/class/scsi_host/$host/scan ; done
+
+Phsical volume create
+
+/# pvcreate /dev/sdb
+  Physical volume "/dev/sdb" successfully created.
+To check the pvsize ==> pvs
+
+Volume group create
+
+vgcreate vg0 /dev/sdb
+
+To check the voulume group size ==> vgs
+
+To display the volumegroup ==> vgdisplay vg0
+
+/# lvcreate -l 2559 -n lv0 vg0
+  Logical volume "lv0" created.
+
+# partprobe /dev/sdb
+
+# mkfs.ext4 /dev/vg0/lv0  (making the file system) | If we create xfs(Extents file system) mkfs.xfs /dev/vg1/lv2
+
+ # lvs (To check the logical volume group craete)
+  LV   VG  Attr       LSize  Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lv0  vg0 -wi-a----- 10.00g
+
+lvdisplay /dev/vg0/lv0  ( To display the logical volume )
+
+To create a dir  and mount into it :- mount /dev/vg0/lv0 /backup/
+
+now adding the disk into /etc/fstab file
+
+/dev/sdb        /arch_backup    ext4    defaults        0 0
+   |
+filesystem       created        file system
+                 directory        type
+
+### /dev/mapper/VG0-lv1     /raid   ext4    defaults        0       0 ####    
+
+ 1==> whenever the server has been rebooted partition should be present or else will not boot  
+
+ 2==> Scan for block errors and correct it
+
+ext ==> Extended file system
+
+xfs ==> Extents file system
+
+*********************************************How to reduce the lvm size ****************************************************************************************************
+
+# nano /etc/fstab ( uncomment the line)
+
+#/dev/mapper/vg0-lv0 /deluxe    ext4    defaults        0       0
+
+# umount /deluxe/ unmounting the file which was mounted 
+
+# mount -a ( for reconfitmation )
+
+# e2fsck -f /dev/vg0/lv0 
+
+# resize2fs e2fsck -f /dev/vg0/lv0 1G ( reducing from  to 1G)
+
+#resize2fs /dev/vg0/lv0 1G
+
+#lvreduce -L 1G /dev/vg0/lv0
+
+#nano /etc/fstab (uncomment the file system)
+
+#mount -a
+
+#df -Th
+
+*********************************************How to extend the lvm size **************************************************************
+# pvcreate /dev/sdc1
+
+# vgextend vg0 /dev/sdc1 ==> vg0 is the old volume groupname
+
+# lvdisplay
+
+# pvdisplay /dev/sdc
+
+# vgdisplay vg0
+
+# vdisplay lv0
+
+#lvextend -L+7.5G /dev/vg0/lv0 /dev/sdc1   ( extending the lvm /dev/vg0/lv0 ==> old lvmname, /dev/sdc1 ==> new hard disk name)
+
+# lvs
+
+# resize2fs /dev/vg0/lv0   ( resizing the volume group)
+
+# df -h
+
+
+*********************************************How to delete the lvm size *******************************************************************
+
+nano /etc/fstab ==> delete the entry line
+ 
+unmount the partition ==> umount /raid/
+
+Disable the lvm ==>  lvchange -an /dev/VG0/lv1
+
+Delete lvm ===>   lvremove /dev/VG0/lv1
+
+Disable volume group ===>  vgremove VG0
+
+Delete the physical voulmes used for volume group ===>  pvremove /dev/sdc
+ 
+
+*****************************************How to do the standard linux partition ************************************************************
+
+lsblk
+fdisk -l
+fdisk /dev/sdb
+partprobe /dev/sdb
+mkfs.ext4 /dev/sdb
+mkdir /apache
+mount /dev/sdb /apache/
+lsblk
+df -Th
+  
+
+now adding the disk into /etc/fstab file
+
+/dev/mapper/vg0-lv0 /deluxe     ext4    defaults        0       0
+   |
+filesystem       created        file system
+
+                 directory        type
+
+***************************************************** How to create the swap memory *************************************************
+
+swap memory is nothing but virtual memory
+
+
+How to Clear Swap Space in Linux?
+If you want to clear Swap space, you may like to run the below command.
+
+# swapoff -a && swapon -a
+
+#################################3
+
+swap out -
+
+swap in -
+
+To check the swap size 
+swapon -s
+Filename                                Type            Size    Used    Priority
+/swapfile                               file            2097148 0       -2
+
+fdisk -l
+fdisk /dev/sdb
+lsblk
+
+Device     Boot Start     End Sectors Size Id Type
+/dev/sdb1        2048 4196351 4194304   2G 82 Linux swap / Solaris
+
+partprobe /dev/sdb
+free -mh
+mkswap /dev/sdb
+swapon -s
+swapon /dev/sdb
+swapon -s
+cat /proc/swaps
+nano /etc/fstab
+/dev/sdb        swap    swap    defaults        0       0
+
+To reduce the swap size
+
+swapoff /dev/sdb
+
+
+********************************************* How to delete the standard partition *********************************************************************************
+
+
+
+
+
+

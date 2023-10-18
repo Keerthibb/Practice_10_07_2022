@@ -1,0 +1,83 @@
+MYSQL Login name
+
+
+CREATE USER 'keerthi'@'localhost' IDENTIFIED BY 'k@ybOQ1Dk}-v9l';
+
+CREATE USER 'mysql'@'localhost' IDENTIFIED BY 'k@ybOQ1Bha}-v9l';
+
+
+CREATE USER 'mysqladmin'@'localhost' IDENTIFIED BY 'root@1234';
+
+GRANT PRIVILEGE ON database.table TO ''@'host';
+
+
+GRANT ALL PRIVILEGES ON * . * TO 'mysqladmin'@'localhost';
+
+FLUSH PRIVILEGES;
+
+mysql -u 'mysqladmin'@'localhost' -p
+
+SHOW GRANTS FOR 'username'@'localhost';
+
+
+SHOW GRANTS FOR 'mysqladmin';
+
+
+GRANT PRIVILEGE ON database.table TO 'keerthi'@'host';
+
+
+GRANT PRIVILEGE ON database.table TO 'mysql'@'host';
+
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'sql'@'localhost' WITH GRANT OPTION;
+
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'keerthi'@'localhost' WITH GRANT OPTION;
+
+show databases;
+
+create a database
+
+CREATE DATABASE amz_pdb;
+
+
+mysql -u mysqladmin'@'localhost -p
+
+
+mysql -u keerthi'@'localhost -h amz_pdb -p
+
+
+CREATE DATABASE amz_sdb;
+
+
+user name : mysqladmin
+password : root@123
+
+
+
+mysql -u mysqladmin'@'localhost -p
+
+mysql -u sqladmin -p
+
+
+Dump files
+
+mysqldump -u mysqladmin –p information_schema > /home/ubuntu/dump_file.sql
+
+mysqldump -u mysqladmin –p performance_schema > /home/ubuntu/dump_file.sql
+
+
+To check the users 
+
+SELECT User, Host FROM mysql.user;
+
+you can set the password policy level lower, for example:
+
+SHOW VARIABLES LIKE 'validate_password%';
+
+SET GLOBAL validate_password.length = 6;
+SET GLOBAL validate_password.number_count = 0;
+
+SET GLOBAL validate_password.policy = 0;
+
+
+
+

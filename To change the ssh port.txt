@@ -1,0 +1,51 @@
+How to change the ssh port 22 to any port
+
+----> service ssh status
+
+----> sudo nano /etc/ssh/sshd_config    (Changing the port in the file_
+
+Remove # at 22 and change it as 11222 (any port)
+
+Port 11222
+
+---> save it and close it
+
+Allow 11222 port in firewall
+
+----> sudo ufw allow 11222 (port)
+ 
+----> Restart the ssh service --->>   systemctl start ssh  or  systemctl restart ssh
+
+---> check in netstat -nta command
+
+keerthi@Ubuntu-K:~$ netstat -ultpn | grep LISTEN
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 0.0.0.0:139             0.0.0.0:*               LISTEN      -
+tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:11222           0.0.0.0:*               LISTEN      -
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      -
+tcp        0      0 0.0.0.0:445             0.0.0.0:*               LISTEN      -
+tcp6       0      0 :::139                  :::*                    LISTEN      -
+tcp6       0      0 :::21                   :::*                    LISTEN      -
+tcp6       0      0 :::11222                :::*                    LISTEN      -
+tcp6       0      0 ::1:3350                :::*                    LISTEN      -
+tcp6       0      0 ::1:631                 :::*                    LISTEN      -
+tcp6       0      0 :::3389                 :::*                    LISTEN      -
+tcp6       0      0 :::445                  :::*                    LISTEN      -
+keerthi@Ubuntu-K:~$ netstat -nta | grep 11222
+tcp        0      0 0.0.0.0:11222           0.0.0.0:*               LISTEN
+tcp        0     64 192.168.43.26:11222     192.168.43.121:60878    ESTABLISHED
+tcp6       0      0 :::11222                :::*                    LISTEN
+
+
+----> Connection has ESTABLISHED
+
+----------****** Importtant ****** --------------------------------------------------------------------
+
+When you change the port from 22 to 11222 in ssh file you have to do ssh in terminal using the below commamd
+
+------->   ssh appi@192.168.43.26 -p 11222
+ -p ---> indicates port and 11222 is the port number
+
+ 

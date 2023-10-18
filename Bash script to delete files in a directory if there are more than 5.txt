@@ -1,0 +1,43 @@
+ls -l |tail -n 6|tr -s " " " "|cut -d " " -f 9 |xargs rm -R
+
+
+
+ls -tr | head -n -5 | xargs rm    --------->
+ 
+This is a backup script that copies files from one directory to another. 
+I use a for loop to check if there are more than five files. If there are, the loop should delete the oldest entries first.
+
+
+ls -tr | head -n -15 | xargs rm -rf  -----> To keep 15 head files and remove the rest of the files.
+
+ ls -lnv ----> Will sort out the asscedning order.
+
+
+rm -rf lab{1..20}
+
+
+*********************************************************************************************************************************************************
+
+#!/bin/bash
+/bin/hostnamectl set-hostname dhl-apo-prd-ec2-cms-worker`hostname -I`
+/bin/wget wget https://staticdownloads.site24x7.com/server/Site24x7InstallScript.sh
+/bin/bash Site24x7InstallScript.sh -i -key=us_f27386c46a49fb1622b9c08ae44bfb92
+/etc/init.d/site24x7monagent start
+
+/bin/yum install nfs-utils -y
+/bin/mkdir mkdir /cms-36-data-service
+
+
+
+*****************************************************************************************************8
+
+#!/bin/bash
+
+echo -n "hours online since "
+who /var/log/wtmp | head -1 | awk '{print $3}'
+echo "============================="
+
+for user in `ls /home`
+do
+  ac $user | sed "s/^\t//" | sed "s/total/$user\t/"
+done

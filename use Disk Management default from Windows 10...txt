@@ -1,0 +1,7 @@
+here the CMD command:
+diskpart
+list disk
+select disk
+list partition
+select partition
+delete partition override

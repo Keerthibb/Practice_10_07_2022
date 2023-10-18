@@ -1,0 +1,68 @@
+Start by updating the package index:
+
+sudo apt update
+
+Run the following command to install Git:
+
+sudo apt install git
+
+Verify the installation by typing the following command which will print the Git version:
+
+git --version
+
+First, install the dependencies necessary to build Git on your Ubuntu system:
+
+sudo apt update
+sudo apt install make libssl-dev libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
+
+Once the installation is complete open your browser, visit the Git project’s mirror on GitHub and copy the latest release link URL that ends in .tar.gz:
+
+We are going to download Git source in the /usr/src directory which is the common location to place source files, change to the directory with:
+
+cd /usr/src/
+Copy
+Download the file as git.tar.gz using the link you copied earlier:
+
+sudo wget https://github.com/git/git/archive/v2.23.0.tar.gz -O git.tar.gz
+Copy
+Next, extract the tar.gz file and change to the Git source directory by typing:
+
+sudo tar -xf git.tar.gz
+cd git-*
+CopyCopy
+Run the following two commands to compile and install Git on your Ubuntu system:
+
+sudo make prefix=/usr/local all
+sudo make prefix=/usr/local install
+CopyCopy
+To verify the installation type the following command which will print the installed Git version:
+
+git --version
+Copy
+git version 2.23.0
+Copy
+If you want to upgrade to a newer version, you will need to repeat the installation process.
+
+Configuring Git
+Now that you have git installed, it is a good idea to set up your personal information that will be used when you commit your code.
+
+The following commands will set your git commit username and email address:
+
+git config --global user.name "keerthi"
+git config --global user.email "keerthikumarjk55gmail.com"
+CopyCopy
+To verify the configuration changes, type:
+
+git config --list
+Copy
+The output should look something like this:
+
+user.name=Your Name
+user.email=youremail@yourdomain.com
+Copy
+The configuration settings are stored in the ~/.gitconfig file:
+
+~/.gitconfig
+[user]
+    name = Your Name
+    email = youremail@yourdomain.com

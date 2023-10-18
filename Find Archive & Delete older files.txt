@@ -1,0 +1,43 @@
+
+
+
+find . -type f -printf "%C@ %p\n" | sort -rn | head -n 10  --> To find out the latest 10 files
+
+
+1. Find & delete
+find /path/to/files/ -type f -name '*.tar.gz' -mtime +30 -exec rm {} \;
+
+Explanation
+
+First part is the find & path where your files are located. Don’t use wildcard * if you have a lot of files because you will get Argument list too long error.
+Second part -type is the file type f stands for files & d stands for directory.
+Third part -name is limiting type of file as here we have used all tar files as *.tar.gz files
+Fourth part -mtime gets how many days the files older than will be listed. +30 is for files older than 30 days.
+Fifth part -exec executes a command. In this case rm is the command, {} gets the filelist and \; closes the command.
+2. Find & Move files
+
+find /path/to/files/ -type f -name '*.tar.gz' -mtime +30 -exec mv {} /path/to/archive/ \;
+Explanation
+
+Find, -type, -name, -mtime already explained as above.
+while Fifth part -exec mv will executes move command. by getting list from {} and move the files and \; will closes the command.
+Final shell script to archive & delete
+#!/bin/bash
+######## Move files older than 10 days ########
+/usr/bin/find /path/to/files/ -type f -name '*.tar.gz' -mtime +10 -exec mv {} /path/to/archive/ \;
+######## Delete files older than 30 days ########
+/usr/bin/find /path/to/archive/ -type f -name '*.tar.gz' -mtime +30 -exec rm {} \;
+
+
+************************************************************************Archiving older files**********************************************************************************************************
+
+
+#!/bin/sh
+find . -mtime +10 -type f -print > oct.txt
+tar -cvf ArchiveFiles.tar `cat oct.txt`
+if [ $? -eq 0 ];then
+mv ArchiveFiles.tar /archive && cd /archive && tar -xvf ArchiveFiles.tar && cd - && echo "rm " `oct list.txt`
+fi
+
+
+

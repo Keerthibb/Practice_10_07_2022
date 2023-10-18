@@ -1,0 +1,17 @@
+---------------------------------- Install IIS Using Windows Commands -----------------------------------------
+
+Type cmd in the search bar and the top result should be Command Prompt. 
+Click on Run as administrator.
+
+----> DISM /online /enable-feature /featureName:IIS-DefaultDocument /All     and press Enter.
+
+
+
+----------------------------------- Install IIS Using PowerShell ----------------------------------------------
+
+
+Type powershell in the search bar and one of the results should be PowerShell ISE. 
+Click on Run as administrator.
+
+ Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole -NoRestart and run it
+

@@ -1,0 +1,39 @@
+The df command stands for "disk-free," and shows available and used disk space on the Linux system.
+
+df -h shows disk space in human-readable format
+
+df -a shows the file system's complete disk usage even if the Available field is 0
+
+df -ah
+
+df -T shows the disk usage along with each block's filesystem type (e.g., xfs, ext2, ext3, btrfs, etc.)
+
+df -i shows used and free inodes
+
+du
+
+du shows the disk usage of files, folders, etc. in the default kilobyte size
+
+du -h shows disk usage in human-readable format for all directories and subdirectories
+
+du -a shows disk usage for all files
+
+du -s provides total disk space used by a particular file or directory.
+
+du -mh /path ---> To get the summary of disk usage of directory tree along with its subtrees in Megabytes (MB) only.
+                   Use the option “-mh” as follows.
+                  The “-m” flag counts the blocks in MB units and “-h” stands for human readable format.
+
+du -k /path  ---> Find out the disk usage of a directory tree with its subtress in Kilobyte blcoks. 
+                  Use the “-k” (displays size in 1024 bytes units)
+
+--------------------------------------------------------------------------------------------------------------------
+ 
+sudo fdisk -l
+
+sudo blkid
+
+lsblk ---> is capbale of displaying more information about each device like the label and model. 
+Check out the man page for more information
+
+ls -l /dev/sd* ---> To check the partiotins

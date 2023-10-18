@@ -1,0 +1,31 @@
+Soft link and Hard Link
+
+1)Master block /Boot block
+2)Super block
+3)Inode block
+4)Data block
+
+Inode block : the inode will keep all the information about your files and directories so when your files is located exactly on the hard drive.
+
+Hard link :-> Not able to find the original file bcz the inode value is same to hard linked files (same inode values for original file and linked file)
+              We cannot differenciate the original file and linked file.
+
+To created the hard link : ln (existed filename)  (newly creating file)
+    
+Soft link :-> We can able to findout the original file and linked file using inode values.
+
+To created the soft link : ln -s (existed filename)  (newly creating file)        
+
+To check the inode values and status, where it is lnked to where. so we have to use stat command
+
+ stat compress  (compress is the filename)
+  File: compress -> Compress and update the archive fie.txt
+  Size: 39              Blocks: 0          IO Block: 4096   symbolic link
+Device: 805h/2053d      Inode: 4195028     Links: 1
+Access: (0777/lrwxrwxrwx)  Uid: ( 1000/ keerthi)   Gid: ( 1000/ keerthi)
+Access: 2021-06-16 20:21:25.904415428 +0530
+Modify: 2021-06-16 20:21:23.896512590 +0530
+Change: 2021-06-16 20:21:23.896512590 +0530
+ Birth: -
+
+

@@ -1,0 +1,57 @@
+yum install epel-release
+
+yum install -y httpd php
+
+We have to install libraries
+
+ yum install -y gcc glibc glibc-commom make gd gd-devel net-snmp
+
+ useradd nagios
+ groupadd nagcmd
+ id nagios
+ usermod -G nagcmd nagios
+ id nagios
+ usermod -G nagcmd apache
+
+wget http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-4.0.7.tar.gz   
+
+wget http://www.nagios-plugins.org/download/nagios-plugins-2.0.3.tar.gz {Plugins}
+
+cd nagios-4.0.7/
+
+tar -zxvf nagios-4.0.7.tar.gz && tar -zxvf nagios-plugins-2.0.3.tar.gz
+
+./configure --with-command-group=nagcmd
+
+make all
+
+make install
+
+make install-init
+
+make install-commandmode
+
+make install-config
+
+make install-webconf
+
+htpasswd -s -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+New password:
+Re-type new password:
+Adding password for user nagiosadmin
+
+systemctl start httpd.service
+systemctl enable httpd.service
+systemctl status httpd.service
+cd ~/nagios/nagios-plugins-2.0.3/
+./configure --with-nagios-user=nagios --with-nagios.group=nagios
+make && make install
+
+#Next we have to make nagios start at boot time
+
+ /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+
+chkconfig --add nagios
+ chkconfig --level 35 nagios on
+ systemctl start nagios.service
+systemctl status nagios.service
